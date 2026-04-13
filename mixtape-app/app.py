@@ -25,63 +25,65 @@ def set_background(img_file):
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 15px solid #8b0000; /* Dark Red Border around the whole page */
+        border: 20px solid #8b0000; /* Thicker Dark Red Border */
         box-sizing: border-box;
     }}
     
-    /* Creating a heavy frosted glass container */
+    /* Heavy Cardstock Container */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.85); /* Whiter background for readability */
+        background-color: rgba(255, 255, 255, 0.95); /* Nearly solid white */
         padding: 50px;
-        border-radius: 20px;
-        border: 4px solid #8b0000;
+        border-radius: 15px;
+        border: 5px solid #8b0000;
         margin-top: 30px;
         margin-bottom: 30px;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.5); /* Shadow to lift it off the drawing */
     }}
 
-    /* Big Bold Typography */
+    /* Big Bold Dark Red Typography with White Glow */
     h1, h2, h3, p, span, label, .stMarkdown {{
-        color: #8b0000 !important; /* Consistent Dark Red Text */
-        font-family: 'Arial Black', Gadget, sans-serif !important; /* Big Bold Font */
+        color: #8b0000 !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(255, 255, 255, 1), -2px -2px 4px rgba(255, 255, 255, 1); /* White text glow */
     }}
 
-    /* Dark Red Button Styling */
+    /* The Button: Dark Red with a White Outer Glow */
     .stButton>button {{
         width: 100%;
-        border: None;
-        border-radius: 5px;
-        background-color: #8b0000; /* Dark Red Box */
-        color: white !important; /* White text for contrast */
-        font-size: 20px !important;
-        font-weight: bold;
-        padding: 15px;
+        border: 3px solid #ffffff; /* White border around the button */
+        border-radius: 10px;
+        background-color: #8b0000; 
+        color: white !important;
+        font-size: 22px !important;
+        font-weight: 900 !important;
+        padding: 20px;
+        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8); /* White glowing effect */
         transition: 0.3s;
     }}
     
     .stButton>button:hover {{
         background-color: #5f0000;
-        color: #ffffff !important;
+        box-shadow: 0px 0px 25px rgba(255, 255, 255, 1);
     }}
 
-    /* Selectbox Text Fix */
-    div[data-baseweb="select"] div {{
-        color: #8b0000 !important;
-        font-weight: bold !important;
+    /* Dropdown menu fix */
+    div[data-baseweb="select"] {{
+        border: 2px solid #8b0000 !important;
+        background-color: white !important;
     }}
     </style>
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Try to load the background
+# Load background
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Loading background...")
+    st.info("🌻 Loading...")
 
 # --- Setup Spotify API ---
 try:
@@ -110,7 +112,6 @@ st.markdown("CHOOSE A SONG FROM YOUR PLAYLIST. THE ALGORITHM WILL FIND THE PERFE
 st.markdown("### CHOOSE A TRACK")
 selected_song = st.selectbox("", df['Display Name'].tolist(), label_visibility="collapsed")
 
-# Removed the rocket emoji from the button text
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
@@ -119,37 +120,34 @@ if st.button("GENERATE MY PERFECT MATCH"):
             artist_name = song_data['Artist']
             artist_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
             
-            if not artist_results['artists']['items']:
-                st.error("ARTIST NOT FOUND")
-                st.stop()
+            if artist_results['artists']['items']:
+                artist_id = artist_results['artists']['items'][0]['id']
+                related = sp.artist_related_artists(artist_id)
                 
-            artist_id = artist_results['artists']['items'][0]['id']
-            related_artists = sp.artist_related_artists(artist_id)
-            
-            if related_artists['artists']:
-                random_artist = random.choice(related_artists['artists'][:5])
-                top_tracks = sp.artist_top_tracks(random_artist['id'])
-                
-                original_playlist_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
-                clean_original_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_playlist_ids}
-                
-                valid_recommendations = [t for t in top_tracks['tracks'] if t['id'] not in clean_original_ids]
-                
-                if valid_recommendations:
-                    best_match = random.choice(valid_recommendations[:5])
-                    st.success("MATCH FOUND")
+                if related['artists']:
+                    match_artist = random.choice(related['artists'][:5])
+                    top_tracks = sp.artist_top_tracks(match_artist['id'])
                     
-                    new_track_id = best_match['id']
-                    embed_url = f"https://open.spotify.com/embed/track/{new_track_id}?utm_source=generator"
-                    components.iframe(embed_url, width=300, height=152)
+                    original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
+                    clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                     
-                    with st.expander("VIEW NERD STATS"):
-                        st.markdown(f"SEED: {selected_song}")
-                        st.markdown(f"MATCHED VIBE: {random_artist['name']}")
+                    new_picks = [t for t in top_tracks['tracks'] if t['id'] not in clean_ids]
+                    
+                    if new_picks:
+                        best_match = random.choice(new_picks[:3])
+                        st.success("MATCH FOUND")
+                        
+                        embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
+                        components.iframe(embed_url, width=300, height=152)
+                        
+                        with st.expander("VIEW NERD STATS"):
+                            st.markdown(f"SEED: {selected_song}")
+                            st.markdown(f"MATCH: {match_artist['name']}")
+                    else:
+                        st.error("NO NEW MATCHES")
                 else:
-                    st.error("TRY A DIFFERENT SONG")
+                    st.error("NO RELATED VIBES")
             else:
-                st.error("NO RELATED VIBES FOUND")
-                
+                st.error("ARTIST NOT FOUND")
         except Exception as e:
             st.error(f"ERROR: {e}")
