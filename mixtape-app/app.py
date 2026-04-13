@@ -25,20 +25,20 @@ def set_background(img_file):
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 20px solid #8b0000; 
+        border: 25px solid #8b0000; 
         box-sizing: border-box;
     }}
     
-    /* The Bulky White Card with a Red Outline */
+    /* The Bulky White Card with a Red Outline and White Spacer */
     .main .block-container {{
         background-color: #ffffff; 
-        padding: 50px;
+        padding: 60px;
         border-radius: 0px; 
-        border: 8px solid #8b0000; /* Bold Red Border */
-        outline: 10px solid white; /* The White Border Spacer you asked for */
+        border: 10px solid #8b0000; /* Bold Red Inner Border */
+        outline: 15px solid white; /* Thick White Spacer Border */
         margin-top: 60px;
         margin-bottom: 60px;
-        box-shadow: 0px 0px 40px rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 50px rgba(0,0,0,0.6);
     }}
 
     /* Big Bulky Red Typography */
@@ -48,32 +48,40 @@ def set_background(img_file):
         font-weight: 900 !important;
         text-transform: uppercase;
         letter-spacing: -1px;
-        line-height: 1.1;
+        line-height: 1.2;
     }}
 
-    /* Massive Red Button */
+    /* Massive Red Button with White Text */
     .stButton>button {{
         width: 100%;
-        border: 4px solid #8b0000;
+        border: None;
         border-radius: 0px;
         background-color: #8b0000; 
-        color: white !important;
-        font-size: 26px !important;
+        color: #ffffff !important; /* Forces text to stay white */
+        font-size: 28px !important;
         font-weight: 900 !important;
         padding: 25px;
-        margin-top: 20px;
+        margin-top: 30px;
         text-transform: uppercase;
+        display: block;
     }}
     
     .stButton>button:hover {{
         background-color: #ffffff;
-        color: #8b0000 !important;
+        color: #8b0000 !important; /* Flips to red on hover */
+        border: 5px solid #8b0000;
     }}
 
-    /* Selectbox styling to match the bulk */
+    /* Dropdown menu styling */
     div[data-baseweb="select"] {{
-        border: 4px solid #8b0000 !important;
+        border: 5px solid #8b0000 !important;
         background-color: white !important;
+        height: 60px;
+    }}
+    
+    div[data-baseweb="select"] div {{
+        color: #8b0000 !important;
+        font-size: 18px !important;
     }}
     </style>
     '''
@@ -85,7 +93,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Background Loading...")
+    st.info("🌻 Sunflower Loading...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -109,13 +117,15 @@ df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
 st.title("THE COUNTER-MIXTAPE")
-st.markdown("CHOOSE A TRACK. FIND THE RESPONSE.")
+
+# The specific requested subtitle
+st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
 
 st.write("") 
 
-selected_song = st.selectbox("PICK A SONG", df['Display Name'].tolist())
+selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
 
-if st.button("GENERATE MATCH"):
+if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
     with st.spinner("CRUNCHING DATA..."):
@@ -143,9 +153,9 @@ if st.button("GENERATE MATCH"):
                         embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
                         
-                        with st.expander("LOG DATA"):
+                        with st.expander("VIEW LOG DATA"):
                             st.write(f"SEED: {selected_song}")
-                            st.write(f"VIBE: {match_artist['name']}")
+                            st.write(f"MATCH: {match_artist['name']}")
                     else:
                         st.error("NO NEW TRACKS")
                 else:
@@ -157,4 +167,4 @@ if st.button("GENERATE MATCH"):
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>HAND-CODED BY OWEN</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>HAND-CODED BY OWEN</h1>", unsafe_allow_html=True)
