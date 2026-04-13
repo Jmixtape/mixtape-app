@@ -59,13 +59,13 @@ def set_background(img_file):
         text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
     }}
 
-    /* CHANGED: White Styling for everything inside the card */
+    /* White Styling for everything inside the card */
     .stMarkdown p, label, .stExpander p, .stMarkdown h3 {{
         color: #ffffff !important;
         text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     }}
 
-    /* MASSIVE BUTTON - Now White with dark text for contrast */
+    /* MASSIVE BUTTON - White with dark text for contrast */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 85px !important;
@@ -158,17 +158,21 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            artist_name = song_data['Artist']
-            search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
+            original_artist_name = song_data['Artist']
             
-            if search['artists']['items']:
-                artist_id = search['artists']['items'][0]['id']
-                related = sp.artist_related_artists(artist_id)
+            # THE FIX: Use your CSV as the recommendation pool to avoid Spotify 403 errors
+            other_artists = df[df['Artist'] != original_artist_name]['Artist'].dropna().unique()
+            
+            if len(other_artists) > 0:
+                # Pick a random artist from your curated list
+                match_artist_name = random.choice(other_artists)
+                search = sp.search(q=f"artist:{match_artist_name}", type='artist', limit=1)
                 
-                if related['artists']:
-                    match_artist = random.choice(related['artists'][:5])
+                if search['artists']['items']:
+                    match_artist = search['artists']['items'][0]
                     top_tracks = sp.artist_top_tracks(match_artist['id'])
                     
+                    # Ensure we don't pick a song that's already in the CSV
                     original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                     clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                     
@@ -183,13 +187,16 @@ if st.button("GENERATE MY PERFECT MATCH"):
                         
                         with st.expander("VIEW LOG DATA"):
                             st.write(f"SEED: {selected_song}")
-                            st.write(f"MATCH: {match_artist['name']}")
+                            st.write(f"VIBE MATCH ARTIST: {match_artist['name']}")
                     else:
-                        st.error("NO NEW TRACKS")
+                        st.error("NO NEW TRACKS FOUND FOR THIS VIBE")
                 else:
-                    st.error("NO RELATED VIBES")
+                    st.error("ARTIST NOT FOUND ON SPOTIFY")
             else:
-                st.error("ARTIST NOT FOUND")
+                st.error("NOT ENOUGH DATA IN CSV TO FIND A MATCH")
+                
+        except spotipy.exceptions.SpotifyException as e:
+            st.error(f"SPOTIFY API ERROR: {e.http_status}")
         except Exception as e:
             st.error(f"ERROR: {e}")
 
