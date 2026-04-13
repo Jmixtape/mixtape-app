@@ -170,7 +170,9 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 
                 if search['artists']['items']:
                     match_artist = search['artists']['items'][0]
-                    top_tracks = sp.artist_top_tracks(match_artist['id'])
+                    
+                    # UPDATED: Added the Jordan ('JO') market code here!
+                    top_tracks = sp.artist_top_tracks(match_artist['id'], country='JO')
                     
                     # Ensure we don't pick a song that's already in the CSV
                     original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
