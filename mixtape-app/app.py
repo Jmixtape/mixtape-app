@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 import random
 import streamlit.components.v1 as components
 import os
@@ -129,10 +129,17 @@ except Exception:
 try:
     client_id = st.secrets["SPOTIPY_CLIENT_ID"]
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
-    auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    
+    # THE FIX: Swapped localhost for the local IP address
+    auth_manager = SpotifyOAuth(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri="http://127.0.0.1:8501", 
+        scope="user-read-private"
+    )
     sp = spotipy.Spotify(auth_manager=auth_manager)
-except Exception:
-    st.error("KEYS MISSING")
+except Exception as e:
+    st.error(f"KEYS MISSING OR AUTH FAILED: {e}")
     st.stop()
 
 # --- 4. Load Data ---
@@ -158,10 +165,10 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            # Clean the string to avoid empty spaces
+            # Clean the string so the search is perfectly formatted
             search_query = str(song_data['Artist']).strip()
             
-            # THE FIX: Removed the 'market' parameter completely. Spotify will search globally.
+            # Execute the search
             search_results = sp.search(q=search_query, type='track', limit=50)
             
             if search_results['tracks']['items']:
@@ -190,7 +197,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 st.error("ARTIST NOT FOUND ON SPOTIFY")
                 
         except spotipy.exceptions.SpotifyException as e:
-            st.error(f"SPOTIFY API ERROR: {e.http_status}. Search Query Failed: {search_query}")
+            st.error(f"SPOTIFY API ERROR: {e.http_status}. Message: {e.msg}")
         except Exception as e:
             st.error(f"ERROR: {e}")
 
