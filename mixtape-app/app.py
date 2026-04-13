@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Footer ---
+# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Text ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -44,14 +44,24 @@ def set_background(img_file):
         box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
     }}
 
-    /* Big Bulky Red Typography */
+    /* Global Typography Base */
     h1, h2, h3, p, span, label, .stMarkdown {{
-        color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
         letter-spacing: -1px;
         line-height: 1.2;
+    }}
+
+    /* Specific White Styling for Title and Subtitle */
+    .white-text-title h1, .white-text-sub p {{
+        color: #ffffff !important;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Added shadow so white is readable on any image */
+    }}
+
+    /* Red Styling for everything inside the white card */
+    .stMarkdown p, label, .stExpander p {{
+        color: #8b0000 !important;
     }}
 
     /* MASSIVE RED BUTTON WITH WHITE TEXT */
@@ -135,8 +145,9 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-st.title("THE COUNTER-MIXTAPE")
-st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
+# Wrapped in divs to apply the specific White Text styles
+st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
 
 st.write("") 
 
