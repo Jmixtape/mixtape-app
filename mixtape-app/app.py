@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast styling with Glass Effect ---
+# --- 2. Bulky High-Contrast styling with MAX Glass Effect ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -29,11 +29,11 @@ def set_background(img_file):
         box-sizing: border-box;
     }}
     
-    /* The Bulky White Card with a Glassy Blur Effect */
+    /* THE MAX GLASS CARD */
     .main .block-container {{
-        /* FIXED: Added transparency and blur to make text pop */
-        background-color: rgba(255, 255, 255, 0.9); 
-        backdrop-filter: blur(10px); /* This blurs the drawing behind the text */
+        background-color: rgba(255, 255, 255, 0.75); /* More translucent */
+        backdrop-filter: blur(20px); /* Heavy blur for that premium frosted look */
+        -webkit-backdrop-filter: blur(20px);
         
         padding: 60px;
         border-radius: 0px; 
@@ -100,7 +100,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Finalizing background loading...")
+    st.info("🌻 Finalizing the vibe...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -135,21 +135,17 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("ANALYZING MUSIC DNA..."):
         try:
-            # Step 1: Find the artist
             artist_name = song_data['Artist']
             search_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
             
             if search_results['artists']['items']:
                 artist_id = search_results['artists']['items'][0]['id']
-                
-                # Step 2: Get Related Artists
                 related = sp.artist_related_artists(artist_id)
                 
                 if related['artists']:
                     match_artist = random.choice(related['artists'][:5])
                     top_tracks = sp.artist_top_tracks(match_artist['id'])
                     
-                    # Step 3: Clean IDs and filter duplicates
                     original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                     clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                     
@@ -159,15 +155,12 @@ if st.button("GENERATE MY PERFECT MATCH"):
                         best_match = random.choice(new_picks[:3])
                         st.success("MATCH FOUND")
                         
-                        # --- Spotify Embedded Player ---
-                        embed_url = f"open.spotify.com{best_match['id']}?utm_source=generator"
+                        embed_url = f"http://googleusercontent.com/spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
                         
-                        # --- Nerd Stats ---
                         with st.expander("VIEW LOG DATA"):
                             st.markdown(f"SEED: {selected_song}")
                             st.markdown(f"MATCH: {match_artist['name']}")
-                            st.markdown("STATUS: API HANDSHAKE SUCCESSFUL")
                     else:
                         st.error("NO NEW TRACKS FOUND")
                 else:
