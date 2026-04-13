@@ -7,10 +7,10 @@ import streamlit.components.v1 as components
 import os
 import base64
 
-# --- App Configuration ---
+# --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- Custom Styling Logic ---
+# --- 2. Professional Flat UI Styling ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -20,7 +20,7 @@ def set_background(img_file):
     bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
-    /* Main Background with a clean border */
+    /* Main Background with Dark Red Border */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
@@ -29,31 +29,31 @@ def set_background(img_file):
         box-sizing: border-box;
     }}
     
-    /* Solid, Clean Content Card */
+    /* Solid White Professional Card */
     .main .block-container {{
-        background-color: #ffffff; /* Pure solid white for maximum class */
+        background-color: #ffffff; 
         padding: 60px;
-        border-radius: 2px; /* Sharp corners look more "pro" and modern */
-        border-left: 10px solid #8b0000; /* Accents rather than full borders */
+        border-radius: 2px; 
+        border-left: 10px solid #8b0000;
         margin-top: 40px;
         margin-bottom: 40px;
-        box-shadow: 20px 20px 0px rgba(139, 0, 0, 0.2); /* Flat "Geeky" shadow */
+        box-shadow: 20px 20px 0px rgba(139, 0, 0, 0.2);
     }}
 
-    /* Clean, Heavy Typography - No Glows */
+    /* Big Bold Typography */
     h1, h2, h3, p, span, label, .stMarkdown {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: -1px; /* Tighter tracking for a modern look */
+        letter-spacing: -1px;
     }}
 
-    /* Solid Dark Red Button - Clean & Sharp */
+    /* Solid Dark Red Button */
     .stButton>button {{
         width: 100%;
         border: none;
-        border-radius: 0px; /* Square buttons look more intentional */
+        border-radius: 0px;
         background-color: #8b0000; 
         color: white !important;
         font-size: 20px !important;
@@ -65,7 +65,7 @@ def set_background(img_file):
     
     .stButton>button:hover {{
         background-color: #4a0000;
-        transform: translateY(-2px); /* Subtle lift instead of a glow */
+        transform: translateY(-2px);
         box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
     }}
 
@@ -78,25 +78,25 @@ def set_background(img_file):
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Load background
+# Load background image
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Loading...")
+    st.info("🌻 Sunflower background loading...")
 
-# --- Setup Spotify API ---
+# --- 3. Setup Spotify API ---
 try:
     client_id = st.secrets["SPOTIPY_CLIENT_ID"]
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
     auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(auth_manager=auth_manager)
 except Exception:
-    st.error("API keys missing.")
+    st.error("API keys missing in Streamlit Secrets.")
     st.stop()
 
-# --- Load Data ---
+# --- 4. Load & Prepare Data ---
 @st.cache_data
 def load_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -106,9 +106,9 @@ def load_data():
 df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
-# --- UI ---
+# --- 5. The Interactive UI ---
 st.title("THE COUNTER-MIXTAPE")
-st.markdown("CHOOSE A SONG FROM YOUR PLAYLIST. THE ALGORITHM WILL FIND THE PERFECT RESPONSE.")
+st.markdown("CHOOSE A TRACK FROM YOUR PLAYLIST. I'LL FIND THE MATHEMATICAL RESPONSE.")
 
 st.markdown("### CHOOSE A TRACK")
 selected_song = st.selectbox("", df['Display Name'].tolist(), label_visibility="collapsed")
@@ -116,19 +116,23 @@ selected_song = st.selectbox("", df['Display Name'].tolist(), label_visibility="
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
-    with st.spinner("ANALYZING DATA..."):
+    with st.spinner("ANALYZING MUSIC DNA..."):
         try:
+            # Step 1: Find the artist
             artist_name = song_data['Artist']
-            artist_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
+            search_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
             
-            if artist_results['artists']['items']:
-                artist_id = artist_results['artists']['items'][0]['id']
+            if search_results['artists']['items']:
+                artist_id = search_results['artists']['items'][0]['id']
+                
+                # Step 2: Get Related Artists
                 related = sp.artist_related_artists(artist_id)
                 
                 if related['artists']:
                     match_artist = random.choice(related['artists'][:5])
                     top_tracks = sp.artist_top_tracks(match_artist['id'])
                     
+                    # Step 3: Clean IDs and filter duplicates
                     original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                     clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                     
@@ -136,19 +140,28 @@ if st.button("GENERATE MY PERFECT MATCH"):
                     
                     if new_picks:
                         best_match = random.choice(new_picks[:3])
+                        
                         st.success("MATCH FOUND")
                         
+                        # --- Spotify Embedded Player ---
                         embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
                         
-                        with st.expander("VIEW NERD STATS"):
+                        # --- Nerd Stats ---
+                        with st.expander("VIEW LOG DATA"):
                             st.markdown(f"SEED: {selected_song}")
-                            st.markdown(f"MATCH: {match_artist['name']}")
+                            st.markdown(f"VIBE MATCH: {match_artist['name']}")
+                            st.markdown("STATUS: API HANDSHAKE SUCCESSFUL")
                     else:
-                        st.error("NO NEW MATCHES")
+                        st.error("NO NEW TRACKS FOUND")
                 else:
-                    st.error("NO RELATED VIBES")
+                    st.error("NO RELATED VIBES FOUND")
             else:
                 st.error("ARTIST NOT FOUND")
+                
         except Exception as e:
-            st.error(f"ERROR: {e}")
+            st.error(f"SYSTEM ERROR: {e}")
+
+# --- Footer ---
+st.markdown("---")
+st.markdown("HAND-CODED WITH 🌻")
