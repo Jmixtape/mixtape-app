@@ -61,11 +61,20 @@ def set_background(img_file):
         margin-top: 60px; 
         margin-bottom: 60px;
         
-        /* CENTERING ALL CONTENT INSIDE THE CARD */
+        /* FORCE EVERYTHING INSIDE TO CENTER */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }}
+
+    /* GLOBAL CENTERING FOR ALL STREAMLIT WIDGETS */
+    [data-testid="stVerticalBlock"] > div {{
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100% !important;
     }}
 
     /* Global Typography Base - Forcing ALL text to be BOLD with 3D Effects */
@@ -118,10 +127,11 @@ def set_background(img_file):
         font-size: 18px !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         text-align: center !important;
-        width: 100%;
+        display: block !important;
+        width: 100% !important;
     }}
 
-    /* PREMIUM SEARCH BAR (Selectbox) */
+    /* PREMIUM SEARCH BAR (Selectbox) - CENTERED */
     div[data-baseweb="select"] {{
         border: 4px ridge #ffffff !important;
         border-radius: 4px !important;
@@ -129,7 +139,7 @@ def set_background(img_file):
         cursor: text !important;
         width: 100%;
         max-width: 500px;
-        margin: 0 auto;
+        margin: 0 auto !important;
     }}
     
     div[data-baseweb="select"] span {{
@@ -140,17 +150,16 @@ def set_background(img_file):
         text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON - Centered */
+    /* MASSIVE BUTTON - CENTERED */
     div.stButton {{
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        width: 100%;
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
     }}
 
     div.stButton > button:first-child {{
         width: 100% !important;
-        max-width: 500px;
+        max-width: 500px !important;
         height: 75px !important;
         border: 4px ridge #ffffff !important;
         border-radius: 4px !important;
@@ -162,7 +171,7 @@ def set_background(img_file):
         text-transform: uppercase !important;
         box-shadow: 0px 8px 15px rgba(0,0,0,0.6);
         transition: all 0.2s ease-in-out;
-        margin: 0 auto;
+        margin: 0 auto !important;
     }}
     
     div.stButton > button:first-child p {{
@@ -182,13 +191,15 @@ def set_background(img_file):
         color: #ffffff !important;
     }}
 
-    /* Center Spotify Embed */
+    /* SPOTIFY IFRAME CENTERING */
     iframe {{
         display: block;
-        margin: 20px auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        border-radius: 12px;
     }}
 
-    /* Expander */
+    /* Expander - CENTERED */
     div[data-testid="stExpander"] {{
         border: 3px solid #ffffff !important;
         border-radius: 4px !important;
