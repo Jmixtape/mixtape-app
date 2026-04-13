@@ -32,16 +32,12 @@ def load_data():
     file_path = os.path.join(current_dir, "polyjamorous.csv")
     return pd.read_csv(file_path)
 
-# VERY IMPORTANT: These lines must be pushed all the way to the left edge!
-# If there are spaces before them, Python hides them.
 df = load_data()
-st.write("My columns are:", df.columns) # Temporary hacker tool!
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- The Interactive UI ---
 st.markdown("### Step 1: Pick a track from your playlist")
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
-
 if st.button("Generate My Perfect Match 🚀"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     original_track_id = song_data['Spotify Track Id']
