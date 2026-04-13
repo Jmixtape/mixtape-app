@@ -67,7 +67,6 @@ if st.button("Generate My Perfect Match 🚀"):
                 top_tracks = sp.artist_top_tracks(random_artist['id'])
                 
                 # 5. Filter out any tracks already in her CSV
-                # (This also cleans the IDs so they match perfectly)
                 original_playlist_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                 clean_original_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_playlist_ids}
                 
@@ -80,6 +79,7 @@ if st.button("Generate My Perfect Match 🚀"):
                     
                     # --- The Playable Spotify Widget ---
                     new_track_id = best_match['id']
+                    # FIXED: The actual official Spotify Embed URL structure
                     embed_url = f"https://open.spotify.com/embed/track/{new_track_id}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
                     
@@ -92,6 +92,10 @@ if st.button("Generate My Perfect Match 🚀"):
                     st.error("The algorithm was too strict! Try picking a different song.")
             else:
                 st.error("This artist is too underground! No related bands found.")
+                
+        except Exception as e:
+            # THIS IS THE X-RAY: It will print the exact error!
+            st.error(f"CRASH REPORT: {e}")
                 
         except Exception:
             st.error("The Spotify API rejected our request. Try another song!")
