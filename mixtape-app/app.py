@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling ---
+# --- 2. Bulky High-Contrast styling with Glass Effect ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -29,9 +29,12 @@ def set_background(img_file):
         box-sizing: border-box;
     }}
     
-    /* The Bulky White Card with a Red Outline and White Spacer */
+    /* The Bulky White Card with a Glassy Blur Effect */
     .main .block-container {{
-        background-color: #ffffff; 
+        /* FIXED: Added transparency and blur to make text pop */
+        background-color: rgba(255, 255, 255, 0.9); 
+        backdrop-filter: blur(10px); /* This blurs the drawing behind the text */
+        
         padding: 60px;
         border-radius: 0px; 
         border: 10px solid #8b0000; 
@@ -91,13 +94,13 @@ def set_background(img_file):
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Load background
+# Load background image
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Loading sunflower art...")
+    st.info("🌻 Finalizing background loading...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -106,10 +109,10 @@ try:
     auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(auth_manager=auth_manager)
 except Exception:
-    st.error("KEYS MISSING")
+    st.error("API keys missing.")
     st.stop()
 
-# --- 4. Load Data ---
+# --- 4. Load & Prepare Data ---
 @st.cache_data
 def load_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -119,7 +122,7 @@ def load_data():
 df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
-# --- 5. UI Layout ---
+# --- 5. The Interactive UI ---
 st.title("THE COUNTER-MIXTAPE")
 st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
 
@@ -130,19 +133,23 @@ selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
-    with st.spinner("CRUNCHING DATA..."):
+    with st.spinner("ANALYZING MUSIC DNA..."):
         try:
+            # Step 1: Find the artist
             artist_name = song_data['Artist']
-            search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
+            search_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
             
-            if search['artists']['items']:
-                artist_id = search['artists']['items'][0]['id']
+            if search_results['artists']['items']:
+                artist_id = search_results['artists']['items'][0]['id']
+                
+                # Step 2: Get Related Artists
                 related = sp.artist_related_artists(artist_id)
                 
                 if related['artists']:
                     match_artist = random.choice(related['artists'][:5])
                     top_tracks = sp.artist_top_tracks(match_artist['id'])
                     
+                    # Step 3: Clean IDs and filter duplicates
                     original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                     clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                     
@@ -150,20 +157,24 @@ if st.button("GENERATE MY PERFECT MATCH"):
                     
                     if new_picks:
                         best_match = random.choice(new_picks[:3])
-                        st.markdown("### MATCH FOUND")
+                        st.success("MATCH FOUND")
                         
-                        embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
+                        # --- Spotify Embedded Player ---
+                        embed_url = f"open.spotify.com{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
                         
+                        # --- Nerd Stats ---
                         with st.expander("VIEW LOG DATA"):
-                            st.write(f"SEED: {selected_song}")
-                            st.write(f"MATCH: {match_artist['name']}")
+                            st.markdown(f"SEED: {selected_song}")
+                            st.markdown(f"MATCH: {match_artist['name']}")
+                            st.markdown("STATUS: API HANDSHAKE SUCCESSFUL")
                     else:
-                        st.error("NO NEW TRACKS")
+                        st.error("NO NEW TRACKS FOUND")
                 else:
-                    st.error("NO VIBE MATCH")
+                    st.error("NO RELATED VIBES FOUND")
             else:
                 st.error("ARTIST NOT FOUND")
+                
         except Exception as e:
             st.error(f"SYSTEM ERROR: {e}")
 
