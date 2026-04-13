@@ -31,12 +31,12 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* LAYER 1: THE THICK RED OUTER BORDER */
+    /* LAYER 1: THE RED OUTER BORDER - REDUCED THICKNESS */
     .stApp::before {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 30px solid #8b0000 !important; 
+        border: 12px solid #8b0000 !important; 
         pointer-events: none; 
         z-index: 9998;
     }}
@@ -45,7 +45,7 @@ def set_background(img_file):
     .stApp::after {{
         content: "";
         position: fixed;
-        top: 30px; left: 30px; right: 30px; bottom: 30px;
+        top: 12px; left: 12px; right: 12px; bottom: 12px;
         border: 10px ridge #ffffff !important; 
         pointer-events: none; 
         z-index: 9999;
