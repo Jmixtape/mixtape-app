@@ -31,35 +31,32 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Floating Frame Border - Thinned down to 10px */
+    /* THE FIX: Floating Frame Border - Pure White Ridge */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 10px ridge #ffffff !important; 
-        pointer-events: none;
+        border: 20px ridge #ffffff !important; 
+        pointer-events: none; /* Lets you click through the border */
         z-index: 9999;
     }}
     
-    /* THE PREMIUM ULTRA-GLASS CARD */
+    /* THE PREMIUM ULTRA-GLASS CARD WITH INVERTED RIDGE BORDER */
     .main .block-container {{
         background-color: rgba(255, 255, 255, 0.15) !important; 
         -webkit-backdrop-filter: blur(30px) brightness(1.1) !important;
         backdrop-filter: blur(30px) brightness(1.1) !important;
         
-        /* INCREASED SPACING: Added more internal padding */
-        padding: 60px 70px !important;
+        padding: 50px 60px;
         border-radius: 12px; 
         
-        /* THINNER BORDERS: Reduced from 14px/6px to 8px/3px */
-        border: 8px ridge #ffffff !important; 
-        outline: 3px solid #8b0000 !important; 
+        /* INVERTED BORDERS: White Ridge + Dark Red Outline */
+        border: 14px ridge #ffffff !important; 
+        outline: 6px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        
-        /* INCREASED SPACING: More room between the card and the screen frame */
-        margin-top: 80px !important;
-        margin-bottom: 80px !important;
+        margin-top: 60px; /* Safely pushed down away from the top frame */
+        margin-bottom: 60px;
     }}
 
     /* Global Typography Base - Forcing ALL text to be BOLD with 3D Effects */
@@ -75,6 +72,7 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.4;
+        /* 3D Red & Black Drop Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
@@ -83,8 +81,16 @@ def set_background(img_file):
     .white-text-title h1 {{
         font-size: 46px !important;
         text-align: center;
-        margin-bottom: 25px !important; /* Added spacing below title */
+        margin-bottom: 10px;
+        color: #ffffff !important;
+        /* Updated text shadow for white text focus */
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
+    }}
+    
+    .mixtape-emoji {{
+        display: inline-block;
+        filter: brightness(0) invert(1);
+        text-shadow: 0 0 15px #ffffff, 0 0 30px #ffffff;
     }}
     
     /* Thick White Subtitle */
@@ -92,7 +98,7 @@ def set_background(img_file):
         text-align: center;
         font-size: 20px !important; 
         font-weight: 900 !important;
-        margin-bottom: 45px !important; /* Added spacing below subtitle */
+        margin-bottom: 30px;
         color: #ffffff !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
@@ -103,17 +109,17 @@ def set_background(img_file):
         color: #ffffff !important;
         font-size: 18px !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
-        margin-bottom: 15px !important; /* Added spacing above search bar */
     }}
 
-    /* PREMIUM SEARCH BAR (Selectbox) - THINNER RIDGE */
+    /* PREMIUM SEARCH BAR (Selectbox) - INVERTED TO WHITE RIDGE */
     div[data-baseweb="select"] {{
-        border: 4px ridge #ffffff !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
     }}
     
+    /* Force the text inside the search box to be bold and dark red */
     div[data-baseweb="select"] span {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
@@ -122,11 +128,11 @@ def set_background(img_file):
         text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON - THINNER RIDGE */
+    /* MASSIVE BUTTON - INVERTED TO WHITE RIDGE */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 75px !important;
-        border: 4px ridge #ffffff !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important; 
         color: #8b0000 !important; 
@@ -136,7 +142,6 @@ def set_background(img_file):
         text-transform: uppercase !important;
         box-shadow: 0px 8px 15px rgba(0,0,0,0.6);
         transition: all 0.2s ease-in-out;
-        margin-top: 30px !important; /* Added spacing above button */
     }}
     
     div.stButton > button:first-child p {{
@@ -148,7 +153,7 @@ def set_background(img_file):
     
     div.stButton > button:hover {{
         background-color: #8b0000 !important;
-        border: 4px ridge #ffffff !important;
+        border: 6px ridge #ffffff !important;
     }}
 
     div.stButton > button:hover p {{
@@ -156,12 +161,17 @@ def set_background(img_file):
         text-shadow: 2px 2px 5px rgba(0,0,0,0.8) !important;
     }}
     
+    div.stButton > button:active {{
+        transform: translateY(4px);
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    }}
+
     /* Absolute Sledgehammer to force the Expander */
     div[data-testid="stExpander"] {{
-        border: 3px solid #ffffff !important;
+        border: 4px solid #ffffff !important;
         border-radius: 4px !important;
         background-color: rgba(139, 0, 0, 0.4) !important; 
-        margin-top: 40px !important; /* Added spacing above log data */
+        margin-top: 15px;
     }}
     
     div[data-testid="stExpander"] * {{
@@ -170,6 +180,14 @@ def set_background(img_file):
         stroke: #ffffff !important;
     }}
 
+    div[data-testid="stExpander"] summary:hover *, 
+    div[data-testid="stExpander"] summary:focus * {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        outline: none !important;
+    }}
+    
     div[data-testid="stExpander"] summary svg, 
     div[data-testid="stExpander"] summary .stIcon,
     div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
@@ -183,7 +201,7 @@ def set_background(img_file):
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        margin-top: 60px !important; /* Added spacing above footer */
+        margin-top: 40px;
         font-size: 22px;
         letter-spacing: 2px;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 10px rgba(0,0,0,0.8) !important;
@@ -245,7 +263,8 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
+# THE FIX: Updated title text and added glowing white mixtape emoji
+st.markdown('<div class="white-text-title"><h1>THE COUNTER MIXTAPE <span class="mixtape-emoji">📼</span></h1></div>', unsafe_allow_html=True)
 
 # Thick White Subtitle text
 st.markdown('<div class="thick-white-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
@@ -283,8 +302,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 if new_picks:
                     best_match = random.choice(new_picks)
                     
-                    # PERSONALIZED MESSAGE
-                    st.markdown("<h3 style='text-align: center; margin-bottom: 30px; margin-top: 30px;'>owen would listen to this :)</h3>", unsafe_allow_html=True)
+                    st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>owen would listen to this :)</h3>", unsafe_allow_html=True)
                     
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
