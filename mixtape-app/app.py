@@ -20,25 +20,25 @@ def set_background(img_file):
     bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
-    /* Main Background with Massive Red Border */
+    /* Main Background with Massive White Border */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 25px solid #8b0000; 
+        border: 25px solid #ffffff; 
         box-sizing: border-box;
     }}
     
     /* THE ULTRA-GLASS CARD */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.8) !important; 
+        background-color: rgba(255, 255, 255, 0.2) !important; 
         -webkit-backdrop-filter: blur(25px) brightness(1.1) !important;
         backdrop-filter: blur(25px) brightness(1.1) !important;
         
         padding: 60px;
         border-radius: 0px; 
-        border: 10px solid #8b0000; 
-        outline: 15px solid white; 
+        border: 10px solid #ffffff; 
+        outline: 15px solid rgba(255, 255, 255, 0.5); 
         margin-top: 60px;
         margin-bottom: 60px;
         box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
@@ -56,22 +56,23 @@ def set_background(img_file):
     /* Specific White Styling for Title and Subtitle */
     .white-text-title h1, .white-text-sub p {{
         color: #ffffff !important;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Added shadow so white is readable on any image */
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
     }}
 
-    /* Red Styling for everything inside the white card */
-    .stMarkdown p, label, .stExpander p {{
-        color: #8b0000 !important;
+    /* CHANGED: White Styling for everything inside the card */
+    .stMarkdown p, label, .stExpander p, .stMarkdown h3 {{
+        color: #ffffff !important;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     }}
 
-    /* MASSIVE RED BUTTON WITH WHITE TEXT */
+    /* MASSIVE BUTTON - Now White with dark text for contrast */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 85px !important;
         border: none !important;
         border-radius: 0px !important;
-        background-color: #8b0000 !important; 
-        color: #ffffff !important; 
+        background-color: #ffffff !important; 
+        color: #000000 !important; 
         font-size: 26px !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
@@ -80,24 +81,24 @@ def set_background(img_file):
     }}
     
     div.stButton > button:first-child p {{
-        color: #ffffff !important; 
+        color: #000000 !important; 
         font-size: 26px !important;
         font-weight: 900 !important;
     }}
     
     div.stButton > button:hover {{
-        background-color: #ffffff !important;
-        color: #8b0000 !important;
-        border: 6px solid #8b0000 !important;
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 6px solid #ffffff !important;
     }}
 
     div.stButton > button:hover p {{
-        color: #8b0000 !important;
+        color: #ffffff !important;
     }}
 
     /* Dropdown menu styling */
     div[data-baseweb="select"] {{
-        border: 5px solid #8b0000 !important;
+        border: 5px solid #ffffff !important;
         background-color: white !important;
     }}
 
@@ -145,7 +146,6 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# Wrapped in divs to apply the specific White Text styles
 st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
 st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
 
