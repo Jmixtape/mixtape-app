@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Premium Minimalist Styling ---
+# --- 2. Bulky High-Contrast Styling ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -20,84 +20,72 @@ def set_background(img_file):
     bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
-    /* Background with a subtle dark overlay to make the card pop */
+    /* Thick Dark Red outer border on the whole page */
     .stApp {{
-        background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), 
-                    url("data:image/jpeg;base64,{bin_str}");
+        background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
+        border: 20px solid #8b0000; 
+        box-sizing: border-box;
     }}
     
-    /* Elegant floating card */
+    /* The Bulky White Card with a Red Outline */
     .main .block-container {{
         background-color: #ffffff; 
-        padding: 50px 60px;
-        border-radius: 8px; 
-        border-top: 8px solid #8b0000; /* Subtle top accent instead of a full border */
+        padding: 50px;
+        border-radius: 0px; 
+        border: 8px solid #8b0000; /* Bold Red Border */
+        outline: 10px solid white; /* The White Border Spacer you asked for */
         margin-top: 60px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-        max-width: 700px;
+        margin-bottom: 60px;
+        box-shadow: 0px 0px 40px rgba(0,0,0,0.5);
     }}
 
-    /* Modern Clean Typography */
-    h1 {{
-        color: #1a1a1a !important;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-        font-weight: 800 !important;
-        letter-spacing: -0.02em;
-        margin-bottom: 0.5rem;
-    }}
-    
-    p, span, label, .stMarkdown {{
-        color: #444444 !important;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-        font-weight: 400 !important;
-        line-height: 1.6;
+    /* Big Bulky Red Typography */
+    h1, h2, h3, p, span, label, .stMarkdown {{
+        color: #8b0000 !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        line-height: 1.1;
     }}
 
-    /* Bold Red Highlights */
-    .highlight {{
-        color: #8b0000;
-        font-weight: 700;
-    }}
-
-    /* Designer Button - Solid Dark Red, No Glow */
+    /* Massive Red Button */
     .stButton>button {{
         width: 100%;
-        border: none;
-        border-radius: 4px;
+        border: 4px solid #8b0000;
+        border-radius: 0px;
         background-color: #8b0000; 
-        color: #ffffff !important;
-        font-size: 16px !important;
-        font-weight: 600 !important;
-        padding: 14px;
-        transition: background-color 0.2s ease;
+        color: white !important;
+        font-size: 26px !important;
+        font-weight: 900 !important;
+        padding: 25px;
         margin-top: 20px;
         text-transform: uppercase;
-        letter-spacing: 1px;
     }}
     
     .stButton>button:hover {{
-        background-color: #5a0000;
-        color: #ffffff !important;
+        background-color: #ffffff;
+        color: #8b0000 !important;
     }}
 
-    /* Custom Input Styling */
+    /* Selectbox styling to match the bulk */
     div[data-baseweb="select"] {{
-        border: 1px solid #e0e0e0 !important;
-        border-radius: 4px !important;
+        border: 4px solid #8b0000 !important;
+        background-color: white !important;
     }}
     </style>
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Load background image
+# Load background
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Finalizing UI...")
+    st.info("🌻 Background Loading...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -106,7 +94,7 @@ try:
     auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(auth_manager=auth_manager)
 except Exception:
-    st.error("Missing API Keys.")
+    st.error("KEYS MISSING")
     st.stop()
 
 # --- 4. Load Data ---
@@ -119,18 +107,18 @@ def load_data():
 df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
-# --- 5. The UI ---
-st.title("The Counter-Mixtape")
-st.markdown("Choose a track from your playlist. I'll use the Spotify API to find a <span class='highlight'>mathematical response</span> with the same vibe.", unsafe_allow_html=True)
+# --- 5. UI Layout ---
+st.title("THE COUNTER-MIXTAPE")
+st.markdown("CHOOSE A TRACK. FIND THE RESPONSE.")
 
-st.write("") # Spacer
+st.write("") 
 
-selected_song = st.selectbox("CHOOSE A TRACK", df['Display Name'].tolist())
+selected_song = st.selectbox("PICK A SONG", df['Display Name'].tolist())
 
-if st.button("Generate My Match"):
+if st.button("GENERATE MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
-    with st.spinner("Analyzing music data..."):
+    with st.spinner("CRUNCHING DATA..."):
         try:
             artist_name = song_data['Artist']
             search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
@@ -150,23 +138,23 @@ if st.button("Generate My Match"):
                     
                     if new_picks:
                         best_match = random.choice(new_picks[:3])
-                        st.markdown("### <span class='highlight'>Perfect Match Found</span>", unsafe_allow_html=True)
+                        st.markdown("### MATCH FOUND")
                         
                         embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
                         
-                        with st.expander("Technical Log Data"):
-                            st.markdown(f"**Seed:** {selected_song}")
-                            st.markdown(f"**Vibe Match:** {match_artist['name']}")
+                        with st.expander("LOG DATA"):
+                            st.write(f"SEED: {selected_song}")
+                            st.write(f"VIBE: {match_artist['name']}")
                     else:
-                        st.error("Try a different song.")
+                        st.error("NO NEW TRACKS")
                 else:
-                    st.error("No related vibes found.")
+                    st.error("NO VIBE MATCH")
             else:
-                st.error("Artist not found.")
+                st.error("ARTIST NOT FOUND")
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"SYSTEM ERROR: {e}")
 
 # --- Footer ---
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 12px; opacity: 0.6;'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
+st.markdown("<br><br><br>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>HAND-CODED BY OWEN</h2>", unsafe_allow_html=True)
