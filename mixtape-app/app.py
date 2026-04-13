@@ -35,6 +35,7 @@ def load_data():
     
     return pd.read_csv(file_path)
 # --- The Interactive UI ---
+st.write(df.columns)
 st.markdown("### Step 1: Pick a track from your playlist")
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
 
