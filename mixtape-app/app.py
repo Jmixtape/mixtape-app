@@ -158,11 +158,14 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            original_artist_name = song_data['Artist']
+            # THE FIX: Force the artist name into a string and remove any wild formatting
+            original_artist_name = str(song_data['Artist']).strip()
             
-            # Use SEARCH to bypass the 403 restriction on discovery endpoints
-            # We ask Spotify for up to 50 tracks by the artist to give us a good pool
-            search_results = sp.search(q=f"artist:{original_artist_name}", type='track', limit=50, market='JO')
+            # THE FIX: Wrap the artist name in quotes so Spotify doesn't freak out over spaces or special characters
+            search_query = f'artist:"{original_artist_name}"'
+            
+            # Execute the search with the safe query
+            search_results = sp.search(q=search_query, type='track', limit=50, market='JO')
             
             if search_results['tracks']['items']:
                 
@@ -174,7 +177,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 new_picks = [t for t in search_results['tracks']['items'] if t['id'] not in clean_ids]
                 
                 if new_picks:
-                    # 3. Randomly pick ONE from the new discoveries (this causes the different results!)
+                    # 3. Randomly pick ONE from the new discoveries
                     best_match = random.choice(new_picks)
                     st.markdown("### MATCH FOUND")
                     
@@ -190,7 +193,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 st.error("ARTIST NOT FOUND ON SPOTIFY")
                 
         except spotipy.exceptions.SpotifyException as e:
-            st.error(f"SPOTIFY API ERROR: {e.http_status}. Please check your Developer Dashboard.")
+            st.error(f"SPOTIFY API ERROR: {e.http_status}. Search Query Failed: {search_query}")
         except Exception as e:
             st.error(f"ERROR: {e}")
 
