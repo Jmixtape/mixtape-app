@@ -158,13 +158,10 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            # THE FIX: Force the artist name into a string and remove any wild formatting
-            original_artist_name = str(song_data['Artist']).strip()
+            # Clean the string but DROP the strict filter to avoid 400 errors
+            search_query = str(song_data['Artist']).strip()
             
-            # THE FIX: Wrap the artist name in quotes so Spotify doesn't freak out over spaces or special characters
-            search_query = f'artist:"{original_artist_name}"'
-            
-            # Execute the search with the safe query
+            # Execute the search as a broad query (exactly like typing it in the Spotify app)
             search_results = sp.search(q=search_query, type='track', limit=50, market='JO')
             
             if search_results['tracks']['items']:
