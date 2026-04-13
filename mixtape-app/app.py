@@ -20,58 +20,59 @@ def set_background(img_file):
     bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
-    /* Main Background */
+    /* Main Background with a clean border */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 20px solid #8b0000; /* Thicker Dark Red Border */
+        border: 12px solid #8b0000; 
         box-sizing: border-box;
     }}
     
-    /* Heavy Cardstock Container */
+    /* Solid, Clean Content Card */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.95); /* Nearly solid white */
-        padding: 50px;
-        border-radius: 15px;
-        border: 5px solid #8b0000;
-        margin-top: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0px 10px 30px rgba(0,0,0,0.5); /* Shadow to lift it off the drawing */
+        background-color: #ffffff; /* Pure solid white for maximum class */
+        padding: 60px;
+        border-radius: 2px; /* Sharp corners look more "pro" and modern */
+        border-left: 10px solid #8b0000; /* Accents rather than full borders */
+        margin-top: 40px;
+        margin-bottom: 40px;
+        box-shadow: 20px 20px 0px rgba(139, 0, 0, 0.2); /* Flat "Geeky" shadow */
     }}
 
-    /* Big Bold Dark Red Typography with White Glow */
+    /* Clean, Heavy Typography - No Glows */
     h1, h2, h3, p, span, label, .stMarkdown {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        text-shadow: 2px 2px 4px rgba(255, 255, 255, 1), -2px -2px 4px rgba(255, 255, 255, 1); /* White text glow */
+        letter-spacing: -1px; /* Tighter tracking for a modern look */
     }}
 
-    /* The Button: Dark Red with a White Outer Glow */
+    /* Solid Dark Red Button - Clean & Sharp */
     .stButton>button {{
         width: 100%;
-        border: 3px solid #ffffff; /* White border around the button */
-        border-radius: 10px;
+        border: none;
+        border-radius: 0px; /* Square buttons look more intentional */
         background-color: #8b0000; 
         color: white !important;
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 900 !important;
-        padding: 20px;
-        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8); /* White glowing effect */
-        transition: 0.3s;
+        padding: 18px;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
     }}
     
     .stButton>button:hover {{
-        background-color: #5f0000;
-        box-shadow: 0px 0px 25px rgba(255, 255, 255, 1);
+        background-color: #4a0000;
+        transform: translateY(-2px); /* Subtle lift instead of a glow */
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
     }}
 
-    /* Dropdown menu fix */
+    /* Selectbox Styling */
     div[data-baseweb="select"] {{
         border: 2px solid #8b0000 !important;
-        background-color: white !important;
+        border-radius: 0px !important;
     }}
     </style>
     '''
