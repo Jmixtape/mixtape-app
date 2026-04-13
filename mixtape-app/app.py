@@ -4,6 +4,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import random
 import streamlit.components.v1 as components
+import os
 
 # --- App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🎧")
@@ -27,11 +28,12 @@ except Exception:  # Fixed F841: Removed unused 'as e'
 # --- Load Her Playlist Data ---
 @st.cache_data
 def load_data():
-    return pd.read_csv("polyjamorous.csv")
-
-df = load_data()
-df['Display Name'] = df['Song'] + " by " + df['Artist']
-
+    # This automatically finds the exact folder where app.py is located
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # This joins that folder path with the CSV name
+    file_path = os.path.join(current_dir, "polyjamorous.csv")
+    
+    return pd.read_csv(file_path)
 # --- The Interactive UI ---
 st.markdown("### Step 1: Pick a track from your playlist")
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
