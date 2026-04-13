@@ -7,9 +7,9 @@ import base64
 import requests
 
 # --- 1. App Configuration ---
-st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
+st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻", layout="centered")
 
-# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Text ---
+# --- 2. Professional High-Contrast Styling with Ultra-Glass & White Text ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -24,48 +24,59 @@ def set_background(img_file):
     #MainMenu {{ visibility: hidden !important; }}
     [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
     
-    /* Main Background with Massive White Border */
+    /* Main Background with Sleek White Border */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 25px solid #ffffff; 
+        border: 20px solid #ffffff; 
         box-sizing: border-box;
     }}
     
-    /* THE ULTRA-GLASS CARD */
+    /* THE PREMIUM ULTRA-GLASS CARD */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.2) !important; 
-        -webkit-backdrop-filter: blur(25px) brightness(1.1) !important;
-        backdrop-filter: blur(25px) brightness(1.1) !important;
+        background-color: rgba(255, 255, 255, 0.15) !important; 
+        -webkit-backdrop-filter: blur(30px) brightness(1.1) !important;
+        backdrop-filter: blur(30px) brightness(1.1) !important;
         
-        padding: 60px;
-        border-radius: 0px; 
-        border: 10px solid #ffffff; 
-        outline: 15px solid rgba(255, 255, 255, 0.5); 
-        margin-top: 20px; /* Reduced since the header is gone */
-        margin-bottom: 60px;
-        box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
+        padding: 50px 60px;
+        border-radius: 16px; /* Softened edges for a professional look */
+        border: 4px solid rgba(255, 255, 255, 0.8); 
+        box-shadow: 0px 25px 50px rgba(0,0,0,0.6);
+        margin-top: 40px;
+        margin-bottom: 40px;
     }}
 
-    /* Global Typography Base - Now restricted to inside the card to prevent UI bleeding */
+    /* Global Typography Base - Forcing ALL text to be bold */
     .main .block-container h1, 
     .main .block-container h2, 
     .main .block-container h3, 
     .main .block-container p, 
     .main .block-container label, 
+    .main .block-container span,
     .stMarkdown {{
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: -1px;
-        line-height: 1.2;
+        letter-spacing: -0.5px;
+        line-height: 1.3;
     }}
 
     /* Specific White Styling for Title and Subtitle */
-    .white-text-title h1, .white-text-sub p {{
+    .white-text-title h1 {{
         color: #ffffff !important;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+        text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+        font-size: 42px !important;
+        text-align: center;
+        margin-bottom: 10px;
+    }}
+    
+    .white-text-sub p {{
+        color: #ffffff !important;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 30px;
     }}
 
     /* White Styling for everything inside the card */
@@ -74,63 +85,82 @@ def set_background(img_file):
         text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     }}
 
-    /* MASSIVE BUTTON - White with dark text for contrast */
+    /* PREMIUM SEARCH BAR (Selectbox) */
+    div[data-baseweb="select"] {{
+        border: 4px solid #ffffff !important;
+        border-radius: 8px !important;
+        background-color: #ffffff !important;
+        cursor: text !important;
+    }}
+    
+    /* Force the text inside the search box to be bold and dark */
+    div[data-baseweb="select"] span {{
+        color: #000000 !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
+        font-weight: 900 !important;
+        font-size: 18px !important;
+    }}
+
+    /* MASSIVE BUTTON - White with dark text and press effect */
     div.stButton > button:first-child {{
         width: 100% !important;
-        height: 85px !important;
+        height: 75px !important;
         border: none !important;
-        border-radius: 0px !important;
+        border-radius: 8px !important;
         background-color: #ffffff !important; 
         color: #000000 !important; 
-        font-size: 26px !important;
+        font-size: 24px !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
-        box-shadow: 6px 6px 0px #000000;
+        box-shadow: 0px 8px 15px rgba(0,0,0,0.4);
+        transition: all 0.2s ease-in-out;
     }}
     
     div.stButton > button:first-child p {{
         color: #000000 !important; 
-        font-size: 26px !important;
+        font-size: 24px !important;
         font-weight: 900 !important;
         text-shadow: none !important;
     }}
     
     div.stButton > button:hover {{
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border: 6px solid #ffffff !important;
-    }}
-
-    div.stButton > button:hover p {{
-        color: #ffffff !important;
-    }}
-
-    /* Dropdown menu styling */
-    div[data-baseweb="select"] {{
-        border: 5px solid #ffffff !important;
-        background-color: white !important;
-    }}
-
-    /* THE FIX: Hide the expander arrow entirely to kill the 'arrow_right' text bug */
-    div[data-testid="stExpander"] {{
-        border: 5px solid #ffffff !important;
-        border-radius: 0px !important;
-        background-color: transparent !important;
+        background-color: #f0f0f0 !important;
+        transform: translateY(-2px);
+        box-shadow: 0px 12px 20px rgba(0,0,0,0.5);
     }}
     
-    /* Hide the SVG icon and any text fallback inside the summary */
+    div.stButton > button:active {{
+        transform: translateY(2px);
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    }}
+
+    /* THE FIX: Absolute Sledgehammer to force the Expander */
+    div[data-testid="stExpander"] {{
+        border: 4px solid #ffffff !important;
+        border-radius: 8px !important;
+        background-color: rgba(0,0,0,0.3) !important; /* Darker backdrop for contrast */
+        margin-top: 15px;
+    }}
+    
+    div[data-testid="stExpander"] * {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+    }}
+
+    div[data-testid="stExpander"] summary:hover *, 
+    div[data-testid="stExpander"] summary:focus * {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        outline: none !important;
+    }}
+    
     div[data-testid="stExpander"] summary svg, 
     div[data-testid="stExpander"] summary .stIcon,
     div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
         display: none !important;
-    }}
-    
-    /* Ensure the expander text stays white */
-    div[data-testid="stExpander"] summary p {{
-        color: #ffffff !important;
-        font-family: 'Arial Black', Gadget, sans-serif !important;
-        font-weight: 900 !important;
     }}
 
     /* CUSTOM WHITE FOOTER */
@@ -140,9 +170,10 @@ def set_background(img_file):
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        margin-top: 50px;
-        font-size: 45px;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        margin-top: 40px;
+        font-size: 20px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
     }}
     </style>
     '''
@@ -156,7 +187,7 @@ try:
 except Exception:
     st.info("🌻 Finalizing UI...")
 
-# --- 3. Setup Direct Spotify API (No Spotipy Cache Issues!) ---
+# --- 3. Setup Direct Spotify API ---
 try:
     client_id = st.secrets["SPOTIPY_CLIENT_ID"]
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
@@ -164,7 +195,6 @@ except Exception:
     st.error("KEYS MISSING. Please check your Streamlit secrets!")
     st.stop()
 
-# Cache the token for 50 minutes so it doesn't request a new one every single click
 @st.cache_data(ttl=3000)
 def get_spotify_token(cid, csec):
     auth_str = f"{cid}:{csec}"
@@ -207,32 +237,29 @@ st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i 
 
 st.write("") 
 
-selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
+# THE FIX: Updated label so the user knows they can type to search!
+selected_song = st.selectbox("🔍 SEARCH OR PICK A TRACK", df['Display Name'].tolist())
+
+st.write("")
 
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
     with st.spinner("CRUNCHING DATA..."):
-        # 1. Fetch a clean token
         token = get_spotify_token(client_id, client_secret)
         
         if not token:
             st.error("FAILED TO AUTHENTICATE WITH SPOTIFY.")
         else:
-            # 2. Run the search query safely via standard requests
             search_query = str(song_data['Artist']).strip()
             search_results = search_spotify_tracks(token, search_query)
             
             if search_results and 'tracks' in search_results and search_results['tracks']['items']:
                 
-                # Exclude by ID
                 original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                 clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
-                
-                # Exclude by NAME (forces lowercase to catch weird capitalizations)
                 original_names = set(df['Song'].dropna().str.lower().str.strip().tolist())
                 
-                # Keep ONLY tracks that have a brand new ID AND a brand new Name
                 new_picks = []
                 for t in search_results['tracks']['items']:
                     track_name_lower = t['name'].lower().strip()
@@ -241,9 +268,8 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 
                 if new_picks:
                     best_match = random.choice(new_picks)
-                    st.markdown("### MATCH FOUND")
+                    st.markdown("<h3 style='text-align: center;'>MATCH FOUND</h3>", unsafe_allow_html=True)
                     
-                    # Embed the fresh track
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
                     
@@ -256,5 +282,5 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 st.error("ARTIST NOT FOUND ON SPOTIFY")
 
 # --- Footer in White ---
-st.markdown("<br><br><br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<p class='white-footer'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
