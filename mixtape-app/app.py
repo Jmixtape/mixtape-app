@@ -24,7 +24,7 @@ def set_background(img_file):
     #MainMenu {{ visibility: hidden !important; }}
     [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
     
-    /* Main Background with Sleek White Border */
+    /* Main Background */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
@@ -33,21 +33,25 @@ def set_background(img_file):
         box-sizing: border-box;
     }}
     
-    /* THE PREMIUM ULTRA-GLASS CARD */
+    /* THE PREMIUM ULTRA-GLASS CARD WITH DARK RED & WHITE RIDGE BORDER */
     .main .block-container {{
         background-color: rgba(255, 255, 255, 0.15) !important; 
         -webkit-backdrop-filter: blur(30px) brightness(1.1) !important;
         backdrop-filter: blur(30px) brightness(1.1) !important;
         
         padding: 50px 60px;
-        border-radius: 16px; /* Softened edges for a professional look */
-        border: 4px solid rgba(255, 255, 255, 0.8); 
-        box-shadow: 0px 25px 50px rgba(0,0,0,0.6);
+        border-radius: 12px; 
+        
+        /* THE NEW BORDER FIX: Dark Red Ridge + White Outline */
+        border: 14px ridge #8b0000 !important; 
+        outline: 6px solid #ffffff !important; 
+        
+        box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
         margin-top: 40px;
-        margin-bottom: 40px;
+        margin-bottom: 60px;
     }}
 
-    /* Global Typography Base - Forcing ALL text to be bold */
+    /* Global Typography Base - Forcing ALL text to be BOLD with 3D Effects */
     .main .block-container h1, 
     .main .block-container h2, 
     .main .block-container h3, 
@@ -60,86 +64,86 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.3;
+        /* NEW TEXT EFFECT: 3D Red & Black Drop Shadow */
+        text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
+        color: #ffffff !important;
     }}
 
-    /* Specific White Styling for Title and Subtitle */
+    /* Specific Sizing for Titles */
     .white-text-title h1 {{
-        color: #ffffff !important;
-        text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
-        font-size: 42px !important;
+        font-size: 46px !important;
         text-align: center;
         margin-bottom: 10px;
+        /* Extra heavy effect for the main title */
+        text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
     .white-text-sub p {{
-        color: #ffffff !important;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         text-align: center;
-        font-size: 16px;
+        font-size: 18px;
         margin-bottom: 30px;
-    }}
-
-    /* White Styling for everything inside the card */
-    .stMarkdown p, label, .stExpander p, .stMarkdown h3 {{
-        color: #ffffff !important;
-        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     }}
 
     /* PREMIUM SEARCH BAR (Selectbox) */
     div[data-baseweb="select"] {{
-        border: 4px solid #ffffff !important;
-        border-radius: 8px !important;
+        border: 6px ridge #8b0000 !important;
+        border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
     }}
     
     /* Force the text inside the search box to be bold and dark */
     div[data-baseweb="select"] span {{
-        color: #000000 !important;
+        color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         font-size: 18px !important;
+        text-shadow: none !important; /* Removing shadow here so it's readable */
     }}
 
     /* MASSIVE BUTTON - White with dark text and press effect */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 75px !important;
-        border: none !important;
-        border-radius: 8px !important;
+        border: 6px ridge #8b0000 !important;
+        border-radius: 4px !important;
         background-color: #ffffff !important; 
-        color: #000000 !important; 
+        color: #8b0000 !important; 
         font-size: 24px !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
-        box-shadow: 0px 8px 15px rgba(0,0,0,0.4);
+        box-shadow: 0px 8px 15px rgba(0,0,0,0.6);
         transition: all 0.2s ease-in-out;
     }}
     
     div.stButton > button:first-child p {{
-        color: #000000 !important; 
-        font-size: 24px !important;
+        color: #8b0000 !important; 
+        font-size: 26px !important;
         font-weight: 900 !important;
-        text-shadow: none !important;
+        text-shadow: none !important; /* Keep button text crisp */
     }}
     
     div.stButton > button:hover {{
-        background-color: #f0f0f0 !important;
-        transform: translateY(-2px);
-        box-shadow: 0px 12px 20px rgba(0,0,0,0.5);
+        background-color: #8b0000 !important;
+        border: 6px solid #ffffff !important;
+    }}
+
+    div.stButton > button:hover p {{
+        color: #ffffff !important;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.8) !important;
     }}
     
     div.stButton > button:active {{
-        transform: translateY(2px);
+        transform: translateY(4px);
         box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
     }}
 
     /* THE FIX: Absolute Sledgehammer to force the Expander */
     div[data-testid="stExpander"] {{
         border: 4px solid #ffffff !important;
-        border-radius: 8px !important;
-        background-color: rgba(0,0,0,0.3) !important; /* Darker backdrop for contrast */
+        border-radius: 4px !important;
+        background-color: rgba(139, 0, 0, 0.4) !important; /* Dark red backdrop */
         margin-top: 15px;
     }}
     
@@ -171,9 +175,9 @@ def set_background(img_file):
         font-weight: 900 !important;
         text-transform: uppercase;
         margin-top: 40px;
-        font-size: 20px;
+        font-size: 22px;
         letter-spacing: 2px;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        text-shadow: 2px 2px 0px #8b0000, 4px 4px 10px rgba(0,0,0,0.8) !important;
     }}
     </style>
     '''
@@ -237,8 +241,8 @@ st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i 
 
 st.write("") 
 
-# THE FIX: Updated label so the user knows they can type to search!
-selected_song = st.selectbox("🔍 SEARCH OR PICK A TRACK", df['Display Name'].tolist())
+# THE FIX: Removed the emoji!
+selected_song = st.selectbox("SEARCH OR PICK A TRACK", df['Display Name'].tolist())
 
 st.write("")
 
@@ -268,7 +272,9 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 
                 if new_picks:
                     best_match = random.choice(new_picks)
-                    st.markdown("<h3 style='text-align: center;'>MATCH FOUND</h3>", unsafe_allow_html=True)
+                    
+                    # THE FIX: Custom personalized success message!
+                    st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>owen would listen to this :)</h3>", unsafe_allow_html=True)
                     
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
