@@ -7,7 +7,22 @@ import base64
 import requests
 
 # --- 1. App Configuration ---
-st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻", layout="centered")
+st.set_page_config(page_title="The Counter-Mixtape", page_icon="📼", layout="centered")
+
+# --- NEW: Link Preview Metadata (WhatsApp/Social Media) ---
+# This tells WhatsApp exactly what image and title to show in the preview box.
+st.markdown(
+    f"""
+    <head>
+        <meta property="og:title" content="The Counter-Mixtape 📼" />
+        <meta property="og:description" content="A custom-coded collection just for you." />
+        <meta property="og:image" content="https://as1.ftcdn.net/v2/jpg/03/16/17/20/1000_F_316172075_d6fBLPVulnqYIb9x3OCYfTBvROlgkGHD.jpg" />
+        <meta property="og:url" content="https://mixtape-app-pf3kbirfsa5r4uaan38qll.streamlit.app/" />
+        <meta property="og:type" content="website" />
+    </head>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- 2. Professional High-Contrast Styling with Ultra-Glass & White Text ---
 def get_base64(bin_file):
