@@ -24,15 +24,22 @@ def set_background(img_file):
     #MainMenu {{ visibility: hidden !important; }}
     [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
     
-    /* Main Background - NOW WITH A DARK RED AND WHITE BORDER */
+    /* Main Background */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        /* Combining Dark Red Ridge with a Thick White Inner Border */
+    }}
+    
+    /* THE FIX: Floating Frame Border (Prevents overlapping the scrollbar or content) */
+    .stApp::after {{
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
         border: 15px ridge #8b0000 !important; 
         box-shadow: inset 0px 0px 0px 15px #ffffff !important;
-        box-sizing: border-box;
+        pointer-events: none; /* Lets you click through the border */
+        z-index: 9999;
     }}
     
     /* THE PREMIUM ULTRA-GLASS CARD WITH INVERTED RIDGE BORDER */
@@ -49,7 +56,7 @@ def set_background(img_file):
         outline: 6px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        margin-top: 50px; /* Adjusted slightly for the thicker screen border */
+        margin-top: 60px; /* Safely pushed down away from the top frame */
         margin-bottom: 60px;
     }}
 
@@ -79,14 +86,14 @@ def set_background(img_file):
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
-    /* THE FIX: Dark Red Subtitle with a White Pop */
-    .dark-red-text-sub p {{
+    /* THE FIX: Thick White Subtitle */
+    .thick-white-text-sub p {{
         text-align: center;
-        font-size: 18px;
+        font-size: 20px !important; /* Made thicker and bigger */
+        font-weight: 900 !important;
         margin-bottom: 30px;
-        color: #8b0000 !important;
-        /* Swapped the shadow to white and black so the dark red is readable */
-        text-shadow: 2px 2px 0px #ffffff, 4px 4px 8px rgba(0,0,0,0.6) !important;
+        color: #ffffff !important;
+        text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
 
     /* FORCING THE SEARCH LABEL TO BE WHITE */
@@ -251,8 +258,8 @@ df['Display Name'] = df['Song'] + " by " + df['Artist']
 # --- 5. UI Layout ---
 st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
 
-# THE FIX: Updated text with a line break and applied the new dark red CSS class
-st.markdown('<div class="dark-red-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
+# THE FIX: Thick White Subtitle text
+st.markdown('<div class="thick-white-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
 
 st.write("") 
 
@@ -303,3 +310,50 @@ if st.button("GENERATE MY PERFECT MATCH"):
 # --- Footer in White ---
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<p class='white-footer'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
+
+# --- 6. THE FIX: Custom Magic Sparkle Mouse Trail Script ---
+sparkle_js = """
+<script>
+const parent = window.parent.document;
+if (!parent.getElementById("sparkle-style")) {
+    const style = parent.createElement("style");
+    style.id = "sparkle-style";
+    style.innerHTML = `
+    .sparkle-trail {
+        position: fixed;
+        pointer-events: none; /* Ignore mouse clicks */
+        width: 10px;
+        height: 10px;
+        background: radial-gradient(circle, #ffffff 20%, rgba(255,255,255,0) 80%);
+        border-radius: 50%;
+        z-index: 999999;
+        box-shadow: 0px 0px 8px #ffffff;
+        animation: fall 0.8s linear forwards;
+    }
+    @keyframes fall {
+        0% { transform: scale(1) translateY(0); opacity: 1; }
+        100% { transform: scale(0.2) translateY(30px); opacity: 0; }
+    }
+    `;
+    parent.head.appendChild(style);
+
+    parent.addEventListener("mousemove", (e) => {
+        // Randomly throttle it so it doesn't overload the browser
+        if (Math.random() > 0.6) return;
+        
+        const spark = parent.createElement("div");
+        spark.className = "sparkle-trail";
+        
+        // Offset so it follows just behind the cursor
+        spark.style.left = (e.clientX - 5) + "px";
+        spark.style.top = (e.clientY - 5) + "px";
+        
+        parent.body.appendChild(spark);
+        
+        // Remove from memory after the animation finishes
+        setTimeout(() => { spark.remove(); }, 800);
+    });
+}
+</script>
+"""
+components.html(sparkle_js, height=0, width=0)
