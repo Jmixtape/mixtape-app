@@ -31,13 +31,12 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Floating Frame Border (Prevents overlapping the scrollbar or content) */
+    /* THE FIX: Floating Frame Border - Pure White Ridge */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 15px ridge #8b0000 !important; 
-        box-shadow: inset 0px 0px 0px 15px #ffffff !important;
+        border: 20px ridge #ffffff !important; 
         pointer-events: none; /* Lets you click through the border */
         z-index: 9999;
     }}
@@ -86,10 +85,10 @@ def set_background(img_file):
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
-    /* THE FIX: Thick White Subtitle */
+    /* Thick White Subtitle */
     .thick-white-text-sub p {{
         text-align: center;
-        font-size: 20px !important; /* Made thicker and bigger */
+        font-size: 20px !important; 
         font-weight: 900 !important;
         margin-bottom: 30px;
         color: #ffffff !important;
@@ -258,7 +257,7 @@ df['Display Name'] = df['Song'] + " by " + df['Artist']
 # --- 5. UI Layout ---
 st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
 
-# THE FIX: Thick White Subtitle text
+# Thick White Subtitle text
 st.markdown('<div class="thick-white-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
 
 st.write("") 
@@ -311,7 +310,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<p class='white-footer'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
 
-# --- 6. THE FIX: Custom Magic Sparkle Mouse Trail Script ---
+# --- 6. Custom Magic Sparkle Mouse Trail Script ---
 sparkle_js = """
 <script>
 const parent = window.parent.document;
@@ -338,19 +337,16 @@ if (!parent.getElementById("sparkle-style")) {
     parent.head.appendChild(style);
 
     parent.addEventListener("mousemove", (e) => {
-        // Randomly throttle it so it doesn't overload the browser
         if (Math.random() > 0.6) return;
         
         const spark = parent.createElement("div");
         spark.className = "sparkle-trail";
         
-        // Offset so it follows just behind the cursor
         spark.style.left = (e.clientX - 5) + "px";
         spark.style.top = (e.clientY - 5) + "px";
         
         parent.body.appendChild(spark);
         
-        // Remove from memory after the animation finishes
         setTimeout(() => { spark.remove(); }, 800);
     });
 }
