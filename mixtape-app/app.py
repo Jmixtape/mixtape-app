@@ -58,7 +58,7 @@ def set_background(img_file):
         border: none !important;
         border-radius: 0px !important;
         background-color: #8b0000 !important; 
-        color: #ffffff !important; /* Forced White Text */
+        color: #ffffff !important; 
         font-size: 24px !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
@@ -67,7 +67,7 @@ def set_background(img_file):
     }}
     
     div.stButton > button:first-child p {{
-        color: #ffffff !important; /* Forces the internal paragraph tag to be white too */
+        color: #ffffff !important; 
         font-size: 24px !important;
         font-weight: 900 !important;
     }}
@@ -154,3 +154,19 @@ if st.button("GENERATE MY PERFECT MATCH"):
                         
                         embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
+                        
+                        with st.expander("VIEW LOG DATA"):
+                            st.write(f"SEED: {selected_song}")
+                            st.write(f"MATCH: {match_artist['name']}")
+                    else:
+                        st.error("NO NEW TRACKS")
+                else:
+                    st.error("NO VIBE MATCH")
+            else:
+                st.error("ARTIST NOT FOUND")
+        except Exception as e:
+            st.error(f"SYSTEM ERROR: {e}")
+
+# --- Footer ---
+st.markdown("<br><br><br>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>HAND-CODED BY OWEN</h1>", unsafe_allow_html=True)
