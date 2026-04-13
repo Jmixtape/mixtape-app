@@ -24,16 +24,16 @@ def set_background(img_file):
     #MainMenu {{ visibility: hidden !important; }}
     [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
     
-    /* Main Background */
+    /* Main Background - NOW WITH A WHITE RIDGE BORDER */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 20px solid #ffffff; 
+        border: 25px ridge #ffffff; /* Screen border is now a ridge! */
         box-sizing: border-box;
     }}
     
-    /* THE PREMIUM ULTRA-GLASS CARD WITH DARK RED & WHITE RIDGE BORDER */
+    /* THE PREMIUM ULTRA-GLASS CARD WITH INVERTED RIDGE BORDER */
     .main .block-container {{
         background-color: rgba(255, 255, 255, 0.15) !important; 
         -webkit-backdrop-filter: blur(30px) brightness(1.1) !important;
@@ -42,9 +42,9 @@ def set_background(img_file):
         padding: 50px 60px;
         border-radius: 12px; 
         
-        /* THE NEW BORDER FIX: Dark Red Ridge + White Outline */
-        border: 14px ridge #8b0000 !important; 
-        outline: 6px solid #ffffff !important; 
+        /* INVERTED BORDERS: White Ridge + Dark Red Outline */
+        border: 14px ridge #ffffff !important; 
+        outline: 6px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
         margin-top: 40px;
@@ -64,7 +64,7 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.3;
-        /* NEW TEXT EFFECT: 3D Red & Black Drop Shadow */
+        /* 3D Red & Black Drop Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
@@ -74,7 +74,6 @@ def set_background(img_file):
         font-size: 46px !important;
         text-align: center;
         margin-bottom: 10px;
-        /* Extra heavy effect for the main title */
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
@@ -84,28 +83,36 @@ def set_background(img_file):
         margin-bottom: 30px;
     }}
 
-    /* PREMIUM SEARCH BAR (Selectbox) */
+    /* FORCING THE SEARCH LABEL TO BE WHITE */
+    div[data-testid="stSelectbox"] label p, 
+    div[data-testid="stSelectbox"] label {{
+        color: #ffffff !important;
+        font-size: 18px !important;
+        text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
+    }}
+
+    /* PREMIUM SEARCH BAR (Selectbox) - INVERTED TO WHITE RIDGE */
     div[data-baseweb="select"] {{
-        border: 6px ridge #8b0000 !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
     }}
     
-    /* Force the text inside the search box to be bold and dark */
+    /* Force the text inside the search box to be bold and dark red */
     div[data-baseweb="select"] span {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         font-size: 18px !important;
-        text-shadow: none !important; /* Removing shadow here so it's readable */
+        text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON - White with dark text and press effect */
+    /* MASSIVE BUTTON - INVERTED TO WHITE RIDGE */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 75px !important;
-        border: 6px ridge #8b0000 !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important; 
         color: #8b0000 !important; 
@@ -121,12 +128,12 @@ def set_background(img_file):
         color: #8b0000 !important; 
         font-size: 26px !important;
         font-weight: 900 !important;
-        text-shadow: none !important; /* Keep button text crisp */
+        text-shadow: none !important; 
     }}
     
     div.stButton > button:hover {{
         background-color: #8b0000 !important;
-        border: 6px solid #ffffff !important;
+        border: 6px ridge #ffffff !important;
     }}
 
     div.stButton > button:hover p {{
@@ -139,11 +146,11 @@ def set_background(img_file):
         box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
     }}
 
-    /* THE FIX: Absolute Sledgehammer to force the Expander */
+    /* Absolute Sledgehammer to force the Expander */
     div[data-testid="stExpander"] {{
         border: 4px solid #ffffff !important;
         border-radius: 4px !important;
-        background-color: rgba(139, 0, 0, 0.4) !important; /* Dark red backdrop */
+        background-color: rgba(139, 0, 0, 0.4) !important; 
         margin-top: 15px;
     }}
     
@@ -241,7 +248,6 @@ st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i 
 
 st.write("") 
 
-# THE FIX: Removed the emoji!
 selected_song = st.selectbox("SEARCH OR PICK A TRACK", df['Display Name'].tolist())
 
 st.write("")
@@ -273,7 +279,6 @@ if st.button("GENERATE MY PERFECT MATCH"):
                 if new_picks:
                     best_match = random.choice(new_picks)
                     
-                    # THE FIX: Custom personalized success message!
                     st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>owen would listen to this :)</h3>", unsafe_allow_html=True)
                     
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
