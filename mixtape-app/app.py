@@ -24,12 +24,14 @@ def set_background(img_file):
     #MainMenu {{ visibility: hidden !important; }}
     [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
     
-    /* Main Background - NOW WITH A WHITE RIDGE BORDER */
+    /* Main Background - NOW WITH A DARK RED AND WHITE BORDER */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        border: 25px ridge #ffffff; /* Screen border is now a ridge! */
+        /* Combining Dark Red Ridge with a Thick White Inner Border */
+        border: 15px ridge #8b0000 !important; 
+        box-shadow: inset 0px 0px 0px 15px #ffffff !important;
         box-sizing: border-box;
     }}
     
@@ -47,7 +49,7 @@ def set_background(img_file):
         outline: 6px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        margin-top: 40px;
+        margin-top: 50px; /* Adjusted slightly for the thicker screen border */
         margin-bottom: 60px;
     }}
 
@@ -63,7 +65,7 @@ def set_background(img_file):
         font-weight: 900 !important;
         text-transform: uppercase;
         letter-spacing: -0.5px;
-        line-height: 1.3;
+        line-height: 1.4;
         /* 3D Red & Black Drop Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
@@ -77,10 +79,14 @@ def set_background(img_file):
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
-    .white-text-sub p {{
+    /* THE FIX: Dark Red Subtitle with a White Pop */
+    .dark-red-text-sub p {{
         text-align: center;
         font-size: 18px;
         margin-bottom: 30px;
+        color: #8b0000 !important;
+        /* Swapped the shadow to white and black so the dark red is readable */
+        text-shadow: 2px 2px 0px #ffffff, 4px 4px 8px rgba(0,0,0,0.6) !important;
     }}
 
     /* FORCING THE SEARCH LABEL TO BE WHITE */
@@ -244,7 +250,9 @@ df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
 st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
-st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
+
+# THE FIX: Updated text with a line break and applied the new dark red CSS class
+st.markdown('<div class="dark-red-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
 
 st.write("") 
 
