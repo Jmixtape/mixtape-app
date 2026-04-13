@@ -130,11 +130,11 @@ try:
     client_id = st.secrets["SPOTIPY_CLIENT_ID"]
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
     
-    # THE FIX: Swapped localhost for the local IP address
+    # THE FIX: Changed port to 8080 so it doesn't crash into Streamlit's 8501
     auth_manager = SpotifyOAuth(
         client_id=client_id,
         client_secret=client_secret,
-        redirect_uri="http://127.0.0.1:8501", 
+        redirect_uri="http://127.0.0.1:8080", 
         scope="user-read-private"
     )
     sp = spotipy.Spotify(auth_manager=auth_manager)
