@@ -95,4 +95,3 @@ if st.button("Generate My Perfect Match 🚀"):
                 
         except Exception:
             st.error("The Spotify API rejected our request. Try another song!")
-            st.error("The algorithm was too strict! Try picking a different song.")
