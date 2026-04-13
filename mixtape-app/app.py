@@ -7,60 +7,68 @@ import streamlit.components.v1 as components
 import os
 import base64
 
+# --- App Configuration ---
+st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
+
 # --- Custom Styling Logic ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
-def set_background(png_file):
-    bin_str = get_base64(png_file)
+def set_background(img_file):
+    bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
     .stApp {{
-        background-image: url("data:image/png;base64,{bin_str}");
+        background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
     }}
     
-    /* Making the text more readable against the drawing */
-    h1, h2, h3, p, span, label {{
-        color: #3d2b1f !important; /* A dark sunflower-seed brown */
-        font-family: 'Courier New', Courier, monospace; /* Geeky typewriter font */
-        font-weight: bold;
+    /* Creating a frosted glass container for the content */
+    .main .block-container {{
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 40px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        margin-top: 50px;
     }}
-    
-    /* Styling the buttons to look more "hand-drawn" */
+
+    /* Geeky Typewriter Typography */
+    h1, h2, h3, p, span, label, .stMarkdown {{
+        color: #4a3728 !important; /* Deep earth brown */
+        font-family: 'Courier New', Courier, monospace !important;
+    }}
+
+    /* Sunflower Yellow Button */
     .stButton>button {{
-        border: 2px solid #3d2b1f;
-        border-radius: 20px;
-        background-color: #ffda03; /* Sunflower yellow */
-        color: #3d2b1f;
+        width: 100%;
+        border: 2px solid #4a3728;
+        border-radius: 15px;
+        background-color: #ffda03; 
+        color: #4a3728;
+        font-weight: bold;
+        transition: 0.3s;
     }}
     
-    /* Make the selectbox container slightly transparent white */
-    div[data-baseweb="select"] {{
-        background-color: rgba(255, 255, 255, 0.7);
-        border-radius: 10px;
+    .stButton>button:hover {{
+        background-color: #4a3728;
+        color: #ffda03;
+        border: 2px solid #ffda03;
     }}
     </style>
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Run the background function
-# Make sure "background.jpg" matches the name of your file on GitHub!
+# Try to load the background - updated to .jpeg
 try:
-    set_background('background.jpg')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    bg_path = os.path.join(current_dir, "background.jpeg")
+    set_background(bg_path)
 except Exception:
-    st.warning("Sunflower background not found. Upload 'background.jpg' to GitHub!")
-# --- App Configuration ---
-st.set_page_config(page_title="The Counter-Mixtape", page_icon="🎧")
-
-st.title("🎧 The Perfect Counter-Mixtape")
-st.markdown(
-    "Pick a song from the playlist you sent me, and my algorithm will analyze "
-    "its musical DNA to find you a brand new song with the exact same vibe!"
-)
+    st.info("🌻 Sunflower drawing loading... (Make sure background.jpeg is on GitHub!)")
 
 # --- Setup Spotify API ---
 try:
@@ -68,7 +76,7 @@ try:
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
     auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(auth_manager=auth_manager)
-except Exception:  # Fixed F841: Removed unused 'as e'
+except Exception:
     st.error("Spotify API keys are missing! Check Streamlit Secrets.")
     st.stop()
 
@@ -83,8 +91,16 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- The Interactive UI ---
-st.markdown("### Step 1: Pick a track from your playlist")
+st.title("🌻 The Counter-Mixtape")
+st.markdown(
+    "Pick a song from the playlist you sent me. My algorithm will scan "
+    "the musical DNA to find a perfect response from my side of the world."
+)
+
+st.markdown("### Step 1: Pick a track")
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
+
+# ... Keep the rest of your 'if st.button' logic from the Premium version below ...
 
 if st.button("Generate My Perfect Match 🚀"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
