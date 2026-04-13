@@ -31,12 +31,12 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Floating Frame Border - Pure White Ridge */
+    /* THE FIX: Floating Frame Border - Pure White Ridge using Viewport Units */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 20px ridge #ffffff !important; 
+        border: 4vw ridge #ffffff !important; 
         pointer-events: none; /* Lets you click through the border */
         z-index: 9999;
     }}
@@ -47,16 +47,20 @@ def set_background(img_file):
         -webkit-backdrop-filter: blur(30px) brightness(1.1) !important;
         backdrop-filter: blur(30px) brightness(1.1) !important;
         
-        padding: 50px 60px;
+        /* Padding scales with screen width */
+        padding: 5vh 5vw !important;
         border-radius: 12px; 
         
-        /* INVERTED BORDERS: White Ridge + Dark Red Outline */
-        border: 14px ridge #ffffff !important; 
-        outline: 6px solid #8b0000 !important; 
+        /* INVERTED BORDERS: Relative widths based on screen size */
+        border: 1.5vw ridge #ffffff !important; 
+        outline: 0.8vw solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        margin-top: 60px; /* Safely pushed down away from the top frame */
-        margin-bottom: 60px;
+        
+        /* Centering and sizing using Viewport units */
+        margin: 10vh auto !important;
+        width: 80vw !important;
+        max-width: 700px;
     }}
 
     /* Global Typography Base - Forcing ALL text to be BOLD with 3D Effects */
@@ -70,27 +74,27 @@ def set_background(img_file):
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: -0.5px;
-        line-height: 1.4;
+        letter-spacing: -1px;
+        line-height: 1.2;
         /* 3D Red & Black Drop Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
 
-    /* Specific Sizing for Titles */
+    /* Specific Sizing for Titles - Scales with screen width */
     .white-text-title h1 {{
-        font-size: 46px !important;
+        font-size: clamp(24px, 6vw, 46px) !important;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 2vh;
         text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
     }}
     
     /* Thick White Subtitle */
     .thick-white-text-sub p {{
         text-align: center;
-        font-size: 20px !important; 
+        font-size: clamp(14px, 3.5vw, 20px) !important; 
         font-weight: 900 !important;
-        margin-bottom: 30px;
+        margin-bottom: 4vh;
         color: #ffffff !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
@@ -99,13 +103,13 @@ def set_background(img_file):
     div[data-testid="stSelectbox"] label p, 
     div[data-testid="stSelectbox"] label {{
         color: #ffffff !important;
-        font-size: 18px !important;
+        font-size: clamp(12px, 3vw, 18px) !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
     }}
 
     /* PREMIUM SEARCH BAR (Selectbox) - INVERTED TO WHITE RIDGE */
     div[data-baseweb="select"] {{
-        border: 6px ridge #ffffff !important;
+        border: 0.8vw ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
@@ -116,19 +120,20 @@ def set_background(img_file):
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
-        font-size: 18px !important;
+        font-size: clamp(12px, 3vw, 18px) !important;
         text-shadow: none !important;
     }}
 
     /* MASSIVE BUTTON - INVERTED TO WHITE RIDGE */
     div.stButton > button:first-child {{
         width: 100% !important;
-        height: 75px !important;
-        border: 6px ridge #ffffff !important;
+        height: 10vh !important;
+        min-height: 60px;
+        border: 0.8vw ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important; 
         color: #8b0000 !important; 
-        font-size: 24px !important;
+        font-size: clamp(16px, 4vw, 24px) !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
@@ -138,14 +143,14 @@ def set_background(img_file):
     
     div.stButton > button:first-child p {{
         color: #8b0000 !important; 
-        font-size: 26px !important;
+        font-size: clamp(16px, 4vw, 26px) !important;
         font-weight: 900 !important;
         text-shadow: none !important; 
     }}
     
     div.stButton > button:hover {{
         background-color: #8b0000 !important;
-        border: 6px ridge #ffffff !important;
+        border: 0.8vw ridge #ffffff !important;
     }}
 
     div.stButton > button:hover p {{
@@ -160,10 +165,10 @@ def set_background(img_file):
 
     /* Absolute Sledgehammer to force the Expander */
     div[data-testid="stExpander"] {{
-        border: 4px solid #ffffff !important;
+        border: 0.5vw solid #ffffff !important;
         border-radius: 4px !important;
         background-color: rgba(139, 0, 0, 0.4) !important; 
-        margin-top: 15px;
+        margin-top: 3vh;
     }}
     
     div[data-testid="stExpander"] * {{
@@ -172,31 +177,33 @@ def set_background(img_file):
         stroke: #ffffff !important;
     }}
 
-    div[data-testid="stExpander"] summary:hover *, 
-    div[data-testid="stExpander"] summary:focus * {{
-        color: #ffffff !important;
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-        outline: none !important;
-    }}
-    
-    div[data-testid="stExpander"] summary svg, 
-    div[data-testid="stExpander"] summary .stIcon,
-    div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
+    div[data-testid="stExpander"] summary svg {{
         display: none !important;
     }}
 
-    /* CUSTOM WHITE FOOTER */
+    /* CUSTOM WHITE FOOTER - Relative sizing */
     .white-footer {{
         color: #ffffff !important;
         text-align: center;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        margin-top: 40px;
-        font-size: 22px;
+        margin-top: 5vh;
+        font-size: clamp(14px, 4vw, 22px);
         letter-spacing: 2px;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 10px rgba(0,0,0,0.8) !important;
+    }}
+
+    /* MOBILE SPECIFIC TWEAKS */
+    @media (max-width: 480px) {{
+        .stApp::after {{
+            border-width: 6vw ridge #ffffff !important;
+        }}
+        .main .block-container {{
+            width: 85vw !important;
+            padding: 20px !important;
+            margin: 8vh auto !important;
+        }}
     }}
     </style>
     '''
@@ -296,7 +303,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
                     st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>owen would listen to this :)</h3>", unsafe_allow_html=True)
                     
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
-                    components.iframe(embed_url, width=300, height=152)
+                    components.iframe(embed_url, width=None, height=152) # Removed fixed width for responsiveness
                     
                     with st.expander("VIEW LOG DATA"):
                         st.write(f"SEED: {selected_song}")
