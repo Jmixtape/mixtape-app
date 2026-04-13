@@ -31,13 +31,13 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Floating Frame Border - Pure White Ridge */
+    /* THE FIX: Thinner Floating Frame Border */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 20px ridge #ffffff !important; 
-        pointer-events: none; /* Lets you click through the border */
+        border: 10px ridge #ffffff !important; 
+        pointer-events: none; 
         z-index: 9999;
     }}
     
@@ -50,12 +50,12 @@ def set_background(img_file):
         padding: 50px 60px;
         border-radius: 12px; 
         
-        /* INVERTED BORDERS: White Ridge + Dark Red Outline */
-        border: 14px ridge #ffffff !important; 
-        outline: 6px solid #8b0000 !important; 
+        /* THINNER INVERTED BORDERS */
+        border: 8px ridge #ffffff !important; 
+        outline: 3px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        margin-top: 60px; /* Safely pushed down away from the top frame */
+        margin-top: 60px; 
         margin-bottom: 60px;
     }}
 
@@ -72,35 +72,31 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.4;
-        /* Default Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
 
-    /* THE FIX: Black and White Title Styling */
+    /* Black and White Title Styling */
     .white-text-title h1 {{
         font-size: 46px !important;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         color: #ffffff !important;
-        /* Replaced Red with Black Shadow for the Title */
         text-shadow: 3px 3px 0px #000000, 6px 6px 15px rgba(0,0,0,0.8) !important;
     }}
     
-    /* THE FIX: Reduced Glow on Mixtape Emoji */
+    /* Soft Glow Mixtape Emoji */
     .mixtape-emoji {{
         display: inline-block;
         filter: brightness(0) invert(1);
-        /* Soft shadow instead of heavy glow so cassette is visible */
         filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
     }}
     
-    /* Thick White Subtitle */
+    /* White Text Spacing */
     .thick-white-text-sub p {{
         text-align: center;
-        font-size: 20px !important; 
+        font-size: 18px !important; 
         font-weight: 900 !important;
-        margin-bottom: 30px;
         color: #ffffff !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
@@ -113,15 +109,14 @@ def set_background(img_file):
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
     }}
 
-    /* PREMIUM SEARCH BAR (Selectbox) - INVERTED TO WHITE RIDGE */
+    /* PREMIUM SEARCH BAR (Selectbox) */
     div[data-baseweb="select"] {{
-        border: 6px ridge #ffffff !important;
+        border: 4px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
     }}
     
-    /* Force the text inside the search box to be bold and dark red */
     div[data-baseweb="select"] span {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
@@ -130,11 +125,11 @@ def set_background(img_file):
         text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON - INVERTED TO WHITE RIDGE */
+    /* MASSIVE BUTTON */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 75px !important;
-        border: 6px ridge #ffffff !important;
+        border: 4px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important; 
         color: #8b0000 !important; 
@@ -155,22 +150,12 @@ def set_background(img_file):
     
     div.stButton > button:hover {{
         background-color: #8b0000 !important;
-        border: 6px ridge #ffffff !important;
+        border: 4px ridge #ffffff !important;
     }}
 
-    div.stButton > button:hover p {{
-        color: #ffffff !important;
-        text-shadow: 2px 2px 5px rgba(0,0,0,0.8) !important;
-    }}
-    
-    div.stButton > button:active {{
-        transform: translateY(4px);
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
-    }}
-
-    /* Absolute Sledgehammer to force the Expander */
+    /* Expander */
     div[data-testid="stExpander"] {{
-        border: 4px solid #ffffff !important;
+        border: 3px solid #ffffff !important;
         border-radius: 4px !important;
         background-color: rgba(139, 0, 0, 0.4) !important; 
         margin-top: 15px;
@@ -182,14 +167,6 @@ def set_background(img_file):
         stroke: #ffffff !important;
     }}
 
-    div[data-testid="stExpander"] summary:hover *, 
-    div[data-testid="stExpander"] summary:focus * {{
-        color: #ffffff !important;
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-        outline: none !important;
-    }}
-    
     div[data-testid="stExpander"] summary svg, 
     div[data-testid="stExpander"] summary .stIcon,
     div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
@@ -265,15 +242,19 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# THE FIX: Updated title text and added soft-glowing white mixtape emoji
+# Black & White Title
 st.markdown('<div class="white-text-title"><h1>THE COUNTER MIXTAPE <span class="mixtape-emoji">📼</span></h1></div>', unsafe_allow_html=True)
 
-# Thick White Subtitle text
-st.markdown('<div class="thick-white-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
+# 1. Instructional Text (NOW AT THE TOP)
+st.markdown('<div class="thick-white-text-sub"><p style="margin-bottom: 5px;">choose your jam and find out what I would recommend</p></div>', unsafe_allow_html=True)
 
 st.write("") 
 
+# Search Box
 selected_song = st.selectbox("SEARCH OR PICK A TRACK", df['Display Name'].tolist())
+
+# 2. Personal Message (NOW UNDER THE SEARCH BOX)
+st.markdown('<div class="thick-white-text-sub"><p style="margin-top: 15px; margin-bottom: 25px;">Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
 
 st.write("")
 
