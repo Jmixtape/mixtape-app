@@ -101,6 +101,22 @@ def set_background(img_file):
         background-color: white !important;
     }}
 
+    /* THE FIX: Force the Expander Button and Arrow to be White */
+    div[data-testid="stExpander"] {{
+        border: 5px solid #ffffff !important;
+        border-radius: 0px !important;
+        background-color: transparent !important;
+    }}
+    
+    div[data-testid="stExpander"] summary, 
+    div[data-testid="stExpander"] summary p, 
+    div[data-testid="stExpander"] summary svg {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
+        font-weight: 900 !important;
+    }}
+
     /* CUSTOM WHITE FOOTER */
     .white-footer {{
         color: #ffffff !important;
