@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling with Red Text & White Borders ---
+# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Footer ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -31,7 +31,7 @@ def set_background(img_file):
     
     /* THE ULTRA-GLASS CARD */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.7) !important; 
+        background-color: rgba(255, 255, 255, 0.8) !important; 
         -webkit-backdrop-filter: blur(25px) brightness(1.1) !important;
         backdrop-filter: blur(25px) brightness(1.1) !important;
         
@@ -41,10 +41,10 @@ def set_background(img_file):
         outline: 15px solid white; 
         margin-top: 60px;
         margin-bottom: 60px;
-        box-shadow: 0px 20px 50px rgba(0,0,0,0.6);
+        box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
     }}
 
-    /* RED TEXT WITH WHITE BORDER (OUTLINE) */
+    /* Big Bulky Red Typography */
     h1, h2, h3, p, span, label, .stMarkdown {{
         color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
@@ -52,21 +52,13 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -1px;
         line-height: 1.2;
-        
-        /* The White Border Effect on Red Text */
-        text-shadow: 
-            -2px -2px 0 #fff,  
-             2px -2px 0 #fff,
-            -2px  2px 0 #fff,
-             2px  2px 0 #fff,
-             0px  0px 10px rgba(255,255,255,0.5);
     }}
 
     /* MASSIVE RED BUTTON WITH WHITE TEXT */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 85px !important;
-        border: 5px solid white !important;
+        border: none !important;
         border-radius: 0px !important;
         background-color: #8b0000 !important; 
         color: #ffffff !important; 
@@ -108,7 +100,7 @@ def set_background(img_file):
         text-transform: uppercase;
         margin-top: 50px;
         font-size: 45px;
-        text-shadow: 2px 2px 15px rgba(0,0,0,0.7); /* Dark shadow to help white pop */
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
     }}
     </style>
     '''
@@ -120,7 +112,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Vibe Loading...")
+    st.info("🌻 Finalizing UI...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -153,7 +145,7 @@ selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
-    with st.spinner("PROCESSING DATA..."):
+    with st.spinner("CRUNCHING DATA..."):
         try:
             artist_name = song_data['Artist']
             search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
