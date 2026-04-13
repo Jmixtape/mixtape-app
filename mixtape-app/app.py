@@ -150,7 +150,7 @@ def get_spotify_token(cid, csec):
 
 def search_spotify_tracks(token, query):
     headers = {"Authorization": f"Bearer {token}"}
-    # THE FIX: Removed the "limit" entirely so Spotify uses its default safe cap
+    # Removed the limit parameter so Spotify uses its safe default (20 tracks)
     params = {"q": query, "type": "track"} 
     response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
     
@@ -194,17 +194,25 @@ if st.button("GENERATE MY PERFECT MATCH"):
             
             if search_results and 'tracks' in search_results and search_results['tracks']['items']:
                 
-                # Exclude tracks already in the CSV
+                # Exclude by ID
                 original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                 clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                 
-                new_picks = [t for t in search_results['tracks']['items'] if t['id'] not in clean_ids]
+                # Exclude by NAME (forces lowercase to catch weird capitalizations)
+                original_names = set(df['Song'].dropna().str.lower().str.strip().tolist())
+                
+                # Keep ONLY tracks that have a brand new ID AND a brand new Name
+                new_picks = []
+                for t in search_results['tracks']['items']:
+                    track_name_lower = t['name'].lower().strip()
+                    if t['id'] not in clean_ids and track_name_lower not in original_names:
+                        new_picks.append(t)
                 
                 if new_picks:
                     best_match = random.choice(new_picks)
                     st.markdown("### MATCH FOUND")
                     
-                    # Original Hand-coded iframe
+                    # Embed the fresh track
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
                     
