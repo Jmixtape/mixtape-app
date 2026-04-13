@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import random
 import streamlit.components.v1 as components
 import os
@@ -125,17 +123,9 @@ try:
 except Exception:
     st.info("🌻 Finalizing UI...")
 
-# --- 3. Setup Spotify API ---
-try:
-    client_id = st.secrets["SPOTIPY_CLIENT_ID"]
-    client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
-    auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-    sp = spotipy.Spotify(auth_manager=auth_manager)
-except Exception:
-    st.error("KEYS MISSING")
-    st.stop()
 
-# --- 4. Load Data ---
+# --- 3. Load Data ---
+# Spotify API blocks bypassed. Relying entirely on curated CSV.
 @st.cache_data
 def load_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -145,7 +135,7 @@ def load_data():
 df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
-# --- 5. UI Layout ---
+# --- 4. UI Layout ---
 st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
 st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
 
@@ -154,51 +144,31 @@ st.write("")
 selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
 
 if st.button("GENERATE MY PERFECT MATCH"):
-    song_data = df[df['Display Name'] == selected_song].iloc[0]
-    
     with st.spinner("CRUNCHING DATA..."):
         try:
-            original_artist_name = song_data['Artist']
+            # THE FIX: Bypass Spotify's blocked API and use your CSV data directly
+            potential_matches = df[df['Display Name'] != selected_song]
             
-            # THE FIX: Use your CSV as the recommendation pool to avoid Spotify 403 errors
-            other_artists = df[df['Artist'] != original_artist_name]['Artist'].dropna().unique()
-            
-            if len(other_artists) > 0:
-                # Pick a random artist from your curated list
-                match_artist_name = random.choice(other_artists)
-                search = sp.search(q=f"artist:{match_artist_name}", type='artist', limit=1)
+            if not potential_matches.empty:
+                # Pick a random track from the remaining pool
+                best_match = potential_matches.sample(1).iloc[0]
                 
-                if search['artists']['items']:
-                    match_artist = search['artists']['items'][0]
-                    
-                    # UPDATED: Added the Jordan ('JO') market code here!
-                    top_tracks = sp.artist_top_tracks(match_artist['id'], country='JO')
-                    
-                    # Ensure we don't pick a song that's already in the CSV
-                    original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
-                    clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
-                    
-                    new_picks = [t for t in top_tracks['tracks'] if t['id'] not in clean_ids]
-                    
-                    if new_picks:
-                        best_match = random.choice(new_picks[:3])
-                        st.markdown("### MATCH FOUND")
-                        
-                        embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
-                        components.iframe(embed_url, width=300, height=152)
-                        
-                        with st.expander("VIEW LOG DATA"):
-                            st.write(f"SEED: {selected_song}")
-                            st.write(f"VIBE MATCH ARTIST: {match_artist['name']}")
-                    else:
-                        st.error("NO NEW TRACKS FOUND FOR THIS VIBE")
-                else:
-                    st.error("ARTIST NOT FOUND ON SPOTIFY")
+                # Extract and clean the ID (Handles raw IDs, full URLs, or URIs)
+                raw_id = str(best_match['Spotify Track Id'])
+                clean_id = raw_id.split('/')[-1].split('?')[0].split(':')[-1]
+                
+                st.markdown("### MATCH FOUND")
+                
+                # Render the standard Spotify iframe using the cleaned ID
+                embed_url = f"https://open.spotify.com/embed/track/{clean_id}?utm_source=generator"
+                components.iframe(embed_url, width=300, height=152)
+                
+                with st.expander("VIEW LOG DATA"):
+                    st.write(f"SEED: {selected_song}")
+                    st.write(f"MATCH: {best_match['Display Name']}")
             else:
                 st.error("NOT ENOUGH DATA IN CSV TO FIND A MATCH")
                 
-        except spotipy.exceptions.SpotifyException as e:
-            st.error(f"SPOTIFY API ERROR: {e.http_status}")
         except Exception as e:
             st.error(f"ERROR: {e}")
 
