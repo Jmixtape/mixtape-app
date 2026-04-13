@@ -72,25 +72,29 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.4;
-        /* 3D Red & Black Drop Shadow */
+        /* Default Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
 
-    /* Specific Sizing for Titles */
+    /* THE FIX: Black and White Title Style */
     .white-text-title h1 {{
         font-size: 46px !important;
         text-align: center;
         margin-bottom: 10px;
         color: #ffffff !important;
-        /* Updated text shadow for white text focus */
-        text-shadow: 3px 3px 0px #8b0000, 6px 6px 15px rgba(0,0,0,0.9) !important;
+        /* Thick Black Outline for that B&W look */
+        -webkit-text-stroke: 2px #000000;
+        text-shadow: 4px 4px 0px #000000 !important;
     }}
     
+    /* THE FIX: Reduced Glow Mixtape Emoji */
     .mixtape-emoji {{
         display: inline-block;
         filter: brightness(0) invert(1);
-        text-shadow: 0 0 15px #ffffff, 0 0 30px #ffffff;
+        /* Much softer glow so the shape is visible */
+        filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+        -webkit-text-stroke: 0px; /* Reset stroke for emoji */
     }}
     
     /* Thick White Subtitle */
@@ -263,7 +267,7 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# THE FIX: Updated title text and added glowing white mixtape emoji
+# THE FIX: Updated title with Black/White styling and soft-glow emoji
 st.markdown('<div class="white-text-title"><h1>THE COUNTER MIXTAPE <span class="mixtape-emoji">📼</span></h1></div>', unsafe_allow_html=True)
 
 # Thick White Subtitle text
