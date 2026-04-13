@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Text ---
+# --- 2. Bulky High-Contrast Styling with Red Text & White Borders ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -31,7 +31,7 @@ def set_background(img_file):
     
     /* THE ULTRA-GLASS CARD */
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.8) !important; 
+        background-color: rgba(255, 255, 255, 0.7) !important; 
         -webkit-backdrop-filter: blur(25px) brightness(1.1) !important;
         backdrop-filter: blur(25px) brightness(1.1) !important;
         
@@ -41,34 +41,32 @@ def set_background(img_file):
         outline: 15px solid white; 
         margin-top: 60px;
         margin-bottom: 60px;
-        box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
+        box-shadow: 0px 20px 50px rgba(0,0,0,0.6);
     }}
 
-    /* Global Typography Base */
+    /* RED TEXT WITH WHITE BORDER (OUTLINE) */
     h1, h2, h3, p, span, label, .stMarkdown {{
+        color: #8b0000 !important;
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
         letter-spacing: -1px;
         line-height: 1.2;
-    }}
-
-    /* Specific White Styling for Title and Subtitle */
-    .white-text-title h1, .white-text-sub p {{
-        color: #ffffff !important;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Added shadow so white is readable on any image */
-    }}
-
-    /* Red Styling for everything inside the white card */
-    .stMarkdown p, label, .stExpander p {{
-        color: #8b0000 !important;
+        
+        /* The White Border Effect on Red Text */
+        text-shadow: 
+            -2px -2px 0 #fff,  
+             2px -2px 0 #fff,
+            -2px  2px 0 #fff,
+             2px  2px 0 #fff,
+             0px  0px 10px rgba(255,255,255,0.5);
     }}
 
     /* MASSIVE RED BUTTON WITH WHITE TEXT */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 85px !important;
-        border: none !important;
+        border: 5px solid white !important;
         border-radius: 0px !important;
         background-color: #8b0000 !important; 
         color: #ffffff !important; 
@@ -110,7 +108,7 @@ def set_background(img_file):
         text-transform: uppercase;
         margin-top: 50px;
         font-size: 45px;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        text-shadow: 2px 2px 15px rgba(0,0,0,0.7); /* Dark shadow to help white pop */
     }}
     </style>
     '''
@@ -122,7 +120,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Finalizing UI...")
+    st.info("🌻 Vibe Loading...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -145,9 +143,8 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# Wrapped in divs to apply the specific White Text styles
-st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
-st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
+st.title("THE COUNTER-MIXTAPE")
+st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
 
 st.write("") 
 
@@ -156,7 +153,7 @@ selected_song = st.selectbox("PICK A TRACK", df['Display Name'].tolist())
 if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
-    with st.spinner("CRUNCHING DATA..."):
+    with st.spinner("PROCESSING DATA..."):
         try:
             artist_name = song_data['Artist']
             search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
