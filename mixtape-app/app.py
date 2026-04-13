@@ -19,6 +19,11 @@ def set_background(img_file):
     bin_str = get_base64(img_file)
     page_bg_img = f'''
     <style>
+    /* HIDE STREAMLIT'S TOP MENU AND HEADER ENTIRELY */
+    header {{ visibility: hidden !important; display: none !important; }}
+    #MainMenu {{ visibility: hidden !important; }}
+    [data-testid="stToolbar"] {{ visibility: hidden !important; display: none !important; }}
+    
     /* Main Background with Massive White Border */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bin_str}");
@@ -38,13 +43,18 @@ def set_background(img_file):
         border-radius: 0px; 
         border: 10px solid #ffffff; 
         outline: 15px solid rgba(255, 255, 255, 0.5); 
-        margin-top: 60px;
+        margin-top: 20px; /* Reduced since the header is gone */
         margin-bottom: 60px;
         box-shadow: 0px 20px 50px rgba(0,0,0,0.5);
     }}
 
-    /* Global Typography Base */
-    h1, h2, h3, p, span, label, .stMarkdown {{
+    /* Global Typography Base - Now restricted to inside the card to prevent UI bleeding */
+    .main .block-container h1, 
+    .main .block-container h2, 
+    .main .block-container h3, 
+    .main .block-container p, 
+    .main .block-container label, 
+    .stMarkdown {{
         font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
         text-transform: uppercase;
@@ -83,6 +93,7 @@ def set_background(img_file):
         color: #000000 !important; 
         font-size: 26px !important;
         font-weight: 900 !important;
+        text-shadow: none !important;
     }}
     
     div.stButton > button:hover {{
@@ -101,27 +112,25 @@ def set_background(img_file):
         background-color: white !important;
     }}
 
-    /* THE FIX: Absolute Sledgehammer to force the Expander and its sneaky little arrow to be white */
+    /* THE FIX: Hide the expander arrow entirely to kill the 'arrow_right' text bug */
     div[data-testid="stExpander"] {{
         border: 5px solid #ffffff !important;
         border-radius: 0px !important;
         background-color: transparent !important;
     }}
     
-    /* Target every single piece of text and icon inside the expander */
-    div[data-testid="stExpander"] * {{
-        color: #ffffff !important;
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
+    /* Hide the SVG icon and any text fallback inside the summary */
+    div[data-testid="stExpander"] summary svg, 
+    div[data-testid="stExpander"] summary .stIcon,
+    div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
+        display: none !important;
     }}
-
-    /* Catch hover/focus states so it doesn't flash blue when clicked */
-    div[data-testid="stExpander"] summary:hover *, 
-    div[data-testid="stExpander"] summary:focus * {{
+    
+    /* Ensure the expander text stays white */
+    div[data-testid="stExpander"] summary p {{
         color: #ffffff !important;
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-        outline: none !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
+        font-weight: 900 !important;
     }}
 
     /* CUSTOM WHITE FOOTER */
