@@ -123,9 +123,9 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# BRUTE FORCE IN-LINE STYLING FOR WHITE TEXT
-st.write(f'<h1 style="color: white !important; text-align: center; font-family: Arial Black; text-shadow: 2px 2px 10px black;">THE COUNTER-MIXTAPE</h1>', unsafe_allow_html=True)
-st.write(f'<p style="color: white !important; text-align: center; font-family: Arial Black; font-size: 20px; text-shadow: 2px 2px 10px black; text-transform: uppercase;">choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p>', unsafe_allow_html=True)
+# Using <div> with explicit style to force White color and prevent "Graying"
+st.markdown('<div style="text-align: center;"><h1 style="color: #ffffff !important; font-family: \'Arial Black\'; text-shadow: 2px 2px 10px black; margin-bottom: 0px;">THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
+st.markdown('<div style="text-align: center;"><p style="color: #ffffff !important; font-family: \'Arial Black\'; font-size: 20px; text-shadow: 2px 2px 10px black; text-transform: uppercase; margin-top: 0px;">choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
 
 st.write("") 
 
@@ -171,6 +171,6 @@ if st.button("GENERATE MY PERFECT MATCH"):
         except Exception as e:
             st.error(f"SYSTEM ERROR: {e}")
 
-# --- Footer in White (Brute Force) ---
+# --- Footer in White (Explicit Style) ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.write(f'<p style="color: white !important; text-align: center; font-family: Arial Black; font-size: 45px; text-shadow: 2px 2px 12px black; text-transform: uppercase;">HAND-CODED BY OWEN</p>', unsafe_allow_html=True)
+st.markdown('<p style="color: #ffffff !important; text-align: center; font-family: \'Arial Black\'; font-size: 45px; text-shadow: 2px 2px 12px black; text-transform: uppercase; font-weight: 900;">HAND-CODED BY OWEN</p>', unsafe_allow_html=True)
