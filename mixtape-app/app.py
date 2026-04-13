@@ -34,8 +34,8 @@ def set_background(img_file):
         background-color: #ffffff; 
         padding: 60px;
         border-radius: 0px; 
-        border: 10px solid #8b0000; /* Bold Red Inner Border */
-        outline: 15px solid white; /* Thick White Spacer Border */
+        border: 10px solid #8b0000; 
+        outline: 15px solid white; 
         margin-top: 60px;
         margin-bottom: 60px;
         box-shadow: 0px 0px 50px rgba(0,0,0,0.6);
@@ -51,37 +51,41 @@ def set_background(img_file):
         line-height: 1.2;
     }}
 
-    /* Massive Red Button with White Text */
-    .stButton>button {{
-        width: 100%;
-        border: None;
-        border-radius: 0px;
-        background-color: #8b0000; 
-        color: #ffffff !important; /* Forces text to stay white */
-        font-size: 28px !important;
+    /* MASSIVE RED BUTTON WITH GUARANTEED WHITE TEXT */
+    div.stButton > button:first-child {{
+        width: 100% !important;
+        height: 80px !important;
+        border: none !important;
+        border-radius: 0px !important;
+        background-color: #8b0000 !important; 
+        color: #ffffff !important; /* Forced White Text */
+        font-size: 24px !important;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
-        padding: 25px;
-        margin-top: 30px;
-        text-transform: uppercase;
-        display: block;
+        text-transform: uppercase !important;
+        box-shadow: 5px 5px 0px #000000;
     }}
     
-    .stButton>button:hover {{
-        background-color: #ffffff;
-        color: #8b0000 !important; /* Flips to red on hover */
-        border: 5px solid #8b0000;
+    div.stButton > button:first-child p {{
+        color: #ffffff !important; /* Forces the internal paragraph tag to be white too */
+        font-size: 24px !important;
+        font-weight: 900 !important;
+    }}
+    
+    div.stButton > button:hover {{
+        background-color: #ffffff !important;
+        color: #8b0000 !important;
+        border: 5px solid #8b0000 !important;
+    }}
+
+    div.stButton > button:hover p {{
+        color: #8b0000 !important;
     }}
 
     /* Dropdown menu styling */
     div[data-baseweb="select"] {{
         border: 5px solid #8b0000 !important;
         background-color: white !important;
-        height: 60px;
-    }}
-    
-    div[data-baseweb="select"] div {{
-        color: #8b0000 !important;
-        font-size: 18px !important;
     }}
     </style>
     '''
@@ -93,7 +97,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Sunflower Loading...")
+    st.info("🌻 Loading sunflower art...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -117,8 +121,6 @@ df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
 st.title("THE COUNTER-MIXTAPE")
-
-# The specific requested subtitle
 st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
 
 st.write("") 
@@ -152,19 +154,3 @@ if st.button("GENERATE MY PERFECT MATCH"):
                         
                         embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                         components.iframe(embed_url, width=300, height=152)
-                        
-                        with st.expander("VIEW LOG DATA"):
-                            st.write(f"SEED: {selected_song}")
-                            st.write(f"MATCH: {match_artist['name']}")
-                    else:
-                        st.error("NO NEW TRACKS")
-                else:
-                    st.error("NO VIBE MATCH")
-            else:
-                st.error("ARTIST NOT FOUND")
-        except Exception as e:
-            st.error(f"SYSTEM ERROR: {e}")
-
-# --- Footer ---
-st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<h1 style='text-align: center;'>HAND-CODED BY OWEN</h1>", unsafe_allow_html=True)
