@@ -60,6 +60,12 @@ def set_background(img_file):
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
         margin-top: 60px; 
         margin-bottom: 60px;
+        
+        /* CENTERING ALL CONTENT INSIDE THE CARD */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }}
 
     /* Global Typography Base - Forcing ALL text to be BOLD with 3D Effects */
@@ -77,6 +83,7 @@ def set_background(img_file):
         line-height: 1.4;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
+        text-align: center !important;
     }}
 
     /* Black and White Title Styling */
@@ -104,12 +111,14 @@ def set_background(img_file):
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
 
-    /* FORCING THE SEARCH LABEL TO BE WHITE */
+    /* FORCING THE SEARCH LABEL TO BE WHITE AND CENTERED */
     div[data-testid="stSelectbox"] label p, 
     div[data-testid="stSelectbox"] label {{
         color: #ffffff !important;
         font-size: 18px !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
+        text-align: center !important;
+        width: 100%;
     }}
 
     /* PREMIUM SEARCH BAR (Selectbox) */
@@ -118,6 +127,9 @@ def set_background(img_file):
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
     }}
     
     div[data-baseweb="select"] span {{
@@ -128,9 +140,17 @@ def set_background(img_file):
         text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON */
+    /* MASSIVE BUTTON - Centered */
+    div.stButton {{
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }}
+
     div.stButton > button:first-child {{
         width: 100% !important;
+        max-width: 500px;
         height: 75px !important;
         border: 4px ridge #ffffff !important;
         border-radius: 4px !important;
@@ -142,6 +162,7 @@ def set_background(img_file):
         text-transform: uppercase !important;
         box-shadow: 0px 8px 15px rgba(0,0,0,0.6);
         transition: all 0.2s ease-in-out;
+        margin: 0 auto;
     }}
     
     div.stButton > button:first-child p {{
@@ -161,12 +182,20 @@ def set_background(img_file):
         color: #ffffff !important;
     }}
 
+    /* Center Spotify Embed */
+    iframe {{
+        display: block;
+        margin: 20px auto !important;
+    }}
+
     /* Expander */
     div[data-testid="stExpander"] {{
         border: 3px solid #ffffff !important;
         border-radius: 4px !important;
         background-color: rgba(139, 0, 0, 0.4) !important; 
         margin-top: 15px;
+        width: 100%;
+        max-width: 500px;
     }}
     
     div[data-testid="stExpander"] * {{
