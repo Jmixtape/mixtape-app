@@ -31,7 +31,7 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Floating Frame Border - Pure White Ridge */
+    /* Floating Frame Border - Pure White Ridge */
     .stApp::after {{
         content: "";
         position: fixed;
@@ -186,17 +186,44 @@ def set_background(img_file):
         display: none !important;
     }}
 
-    /* CUSTOM WHITE FOOTER */
+    /* CUSTOM BARELY VISIBLE WHITE FOOTER */
     .white-footer {{
-        color: #ffffff !important;
+        color: rgba(255, 255, 255, 0.2) !important; /* 20% Opacity */
         text-align: center;
         font-family: 'Arial Black', Gadget, sans-serif !important;
-        font-weight: 900 !important;
-        text-transform: uppercase;
         margin-top: 40px;
-        font-size: 22px;
-        letter-spacing: 2px;
-        text-shadow: 2px 2px 0px #8b0000, 4px 4px 10px rgba(0,0,0,0.8) !important;
+        font-size: 16px;
+        letter-spacing: 1px;
+        text-shadow: none !important; /* Removed shadow so it hides better */
+    }}
+
+    /* MOBILE RESPONSIVENESS FIXES */
+    @media (max-width: 768px) {{
+        .stApp::after {{
+            border-width: 10px ridge #ffffff !important; /* Thinner frame on mobile */
+        }}
+        .main .block-container {{
+            padding: 30px 20px !important; /* Less padding to fit screens */
+            border-width: 8px !important;
+            outline-width: 4px !important;
+            margin-top: 40px !important;
+            margin-bottom: 40px !important;
+        }}
+        .white-text-title h1 {{
+            font-size: 32px !important; /* Scale down massive title */
+        }}
+        .thick-white-text-sub p {{
+            font-size: 16px !important; /* Scale down subtitle */
+        }}
+        div.stButton > button:first-child {{
+            height: 60px !important;
+        }}
+        div.stButton > button:first-child p {{
+            font-size: 20px !important;
+        }}
+        div[data-testid="stSelectbox"] label p {{
+            font-size: 14px !important;
+        }}
     }}
     </style>
     '''
@@ -255,7 +282,8 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
+# THE FIX: Added white cassette emoji with CSS trick to force pure white color
+st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE <span style="filter: brightness(0) invert(1);">📼</span></h1></div>', unsafe_allow_html=True)
 
 # Thick White Subtitle text
 st.markdown('<div class="thick-white-text-sub"><p>choose your jam and find out what I would recommend <br> Hope this is fun enough but not too distracting you got this Cutie !!!</p></div>', unsafe_allow_html=True)
@@ -308,7 +336,8 @@ if st.button("GENERATE MY PERFECT MATCH"):
 
 # --- Footer in White ---
 st.markdown("<br>", unsafe_allow_html=True)
-st.markdown("<p class='white-footer'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
+# THE FIX: Faded, barely visible, non-capitalized footer
+st.markdown("<p class='white-footer'>Hand-coded By Owen :D</p>", unsafe_allow_html=True)
 
 # --- 6. Custom Magic Sparkle Mouse Trail Script ---
 sparkle_js = """
