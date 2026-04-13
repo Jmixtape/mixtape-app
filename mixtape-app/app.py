@@ -29,17 +29,27 @@ def set_background(img_file):
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        /* THE RED OUTER SCREEN BORDER - MADE BIGGER & OUTSIDE */
-        border: 25px solid #8b0000 !important;
+        /* THE RED OUTER SCREEN BORDER - FORCED TO THE FRONT */
+        border: 30px solid #8b0000 !important;
         box-sizing: border-box;
+        z-index: 1;
     }}
     
-    /* THE FIX: Thinner Floating Frame Border - NOW INSIDE THE RED */
+    /* THE WHITE RIDGE BORDER - NOW POSITIONED INSIDE THE RED */
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0px; left: 0px; right: 0px; bottom: 0px;
+        border: 10px ridge #ffffff !important; 
+        pointer-events: none; 
+        z-index: 2;
+    }}
+    
+    /* ENSURE NO OVERLAP CLASH */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 10px ridge #ffffff !important; 
         pointer-events: none; 
         z-index: 9999;
     }}
@@ -66,6 +76,8 @@ def set_background(img_file):
         flex-direction: column;
         align-items: center;
         text-align: center;
+        position: relative;
+        z-index: 10;
     }}
 
     /* GLOBAL CENTERING FOR ALL STREAMLIT WIDGETS */
