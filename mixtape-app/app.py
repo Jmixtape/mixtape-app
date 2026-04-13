@@ -101,20 +101,27 @@ def set_background(img_file):
         background-color: white !important;
     }}
 
-    /* THE FIX: Force the Expander Button and Arrow to be White */
+    /* THE FIX: Absolute Sledgehammer to force the Expander and its sneaky little arrow to be white */
     div[data-testid="stExpander"] {{
         border: 5px solid #ffffff !important;
         border-radius: 0px !important;
         background-color: transparent !important;
     }}
     
-    div[data-testid="stExpander"] summary, 
-    div[data-testid="stExpander"] summary p, 
-    div[data-testid="stExpander"] summary svg {{
+    /* Target every single piece of text and icon inside the expander */
+    div[data-testid="stExpander"] * {{
         color: #ffffff !important;
         fill: #ffffff !important;
-        font-family: 'Arial Black', Gadget, sans-serif !important;
-        font-weight: 900 !important;
+        stroke: #ffffff !important;
+    }}
+
+    /* Catch hover/focus states so it doesn't flash blue when clicked */
+    div[data-testid="stExpander"] summary:hover *, 
+    div[data-testid="stExpander"] summary:focus * {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        outline: none !important;
     }}
 
     /* CUSTOM WHITE FOOTER */
@@ -166,7 +173,6 @@ def get_spotify_token(cid, csec):
 
 def search_spotify_tracks(token, query):
     headers = {"Authorization": f"Bearer {token}"}
-    # Removed the limit parameter so Spotify uses its safe default (20 tracks)
     params = {"q": query, "type": "track"} 
     response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
     
