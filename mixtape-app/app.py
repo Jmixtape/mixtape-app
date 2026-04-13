@@ -40,7 +40,10 @@ st.markdown("### Step 1: Pick a track from your playlist")
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
 if st.button("Generate My Perfect Match 🚀"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
-    original_track_id = song_data['Spotify Track Id']
+    raw_id = str(song_data['Spotify Track Id'])
+    
+    # Strip away any URLs or URIs to extract ONLY the pure Spotify ID code
+    original_track_id = raw_id.split('/')[-1].split('?')[0].split(':')[-1]
 
     # Extract the musical DNA safely
     try:
