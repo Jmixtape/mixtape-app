@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Text ---
+# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Accents ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -53,13 +53,14 @@ def set_background(img_file):
         line-height: 1.2;
     }}
 
-    /* Specific White Styling for Title and Subtitle */
-    .white-text-title h1, .white-text-sub p {{
+    /* FIXED: Force Title and Subtitle to White */
+    .white-text {{
         color: #ffffff !important;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Added shadow so white is readable on any image */
+        text-align: center;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.7) !important;
     }}
 
-    /* Red Styling for everything inside the white card */
+    /* Red Styling for elements inside the white card */
     .stMarkdown p, label, .stExpander p {{
         color: #8b0000 !important;
     }}
@@ -91,26 +92,19 @@ def set_background(img_file):
         border: 6px solid #8b0000 !important;
     }}
 
-    div.stButton > button:hover p {{
-        color: #8b0000 !important;
-    }}
-
     /* Dropdown menu styling */
     div[data-baseweb="select"] {{
         border: 5px solid #8b0000 !important;
         background-color: white !important;
     }}
 
-    /* CUSTOM WHITE FOOTER */
+    /* WHITE FOOTER STYLE */
     .white-footer {{
         color: #ffffff !important;
         text-align: center;
-        font-family: 'Arial Black', Gadget, sans-serif !important;
-        font-weight: 900 !important;
-        text-transform: uppercase;
         margin-top: 50px;
         font-size: 45px;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        text-shadow: 2px 2px 12px rgba(0,0,0,0.8);
     }}
     </style>
     '''
@@ -122,7 +116,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Finalizing UI...")
+    st.info("🌻 Vibe Loading...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -145,9 +139,9 @@ df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
 # --- 5. UI Layout ---
-# Wrapped in divs to apply the specific White Text styles
-st.markdown('<div class="white-text-title"><h1>THE COUNTER-MIXTAPE</h1></div>', unsafe_allow_html=True)
-st.markdown('<div class="white-text-sub"><p>choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p></div>', unsafe_allow_html=True)
+# Using the .white-text class for the external headings
+st.markdown('<h1 class="white-text">THE COUNTER-MIXTAPE</h1>', unsafe_allow_html=True)
+st.markdown('<p class="white-text" style="font-size: 20px;">choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!</p>', unsafe_allow_html=True)
 
 st.write("") 
 
@@ -191,7 +185,7 @@ if st.button("GENERATE MY PERFECT MATCH"):
             else:
                 st.error("ARTIST NOT FOUND")
         except Exception as e:
-            st.error(f"ERROR: {e}")
+            st.error(f"SYSTEM ERROR: {e}")
 
 # --- Footer in White ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
