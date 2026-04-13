@@ -28,15 +28,18 @@ except Exception:  # Fixed F841: Removed unused 'as e'
 # --- Load Her Playlist Data ---
 @st.cache_data
 def load_data():
-    # This automatically finds the exact folder where app.py is located
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    # This joins that folder path with the CSV name
     file_path = os.path.join(current_dir, "polyjamorous.csv")
-    
     return pd.read_csv(file_path)
+
+# VERY IMPORTANT: These lines must be pushed all the way to the left edge!
+# If there are spaces before them, Python hides them.
+df = load_data()
+st.write("My columns are:", df.columns) # Temporary hacker tool!
+df['Display Name'] = df['Song'] + " by " + df['Artist']
+
 # --- The Interactive UI ---
 st.markdown("### Step 1: Pick a track from your playlist")
-st.write(df.columns)
 selected_song = st.selectbox("Choose a song:", df['Display Name'].tolist())
 
 if st.button("Generate My Perfect Match 🚀"):
