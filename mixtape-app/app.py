@@ -158,11 +158,11 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            # Clean the string but DROP the strict filter to avoid 400 errors
+            # Clean the string to avoid empty spaces
             search_query = str(song_data['Artist']).strip()
             
-            # Execute the search as a broad query (exactly like typing it in the Spotify app)
-            search_results = sp.search(q=search_query, type='track', limit=50, market='JO')
+            # THE FIX: Removed the 'market' parameter completely. Spotify will search globally.
+            search_results = sp.search(q=search_query, type='track', limit=50)
             
             if search_results['tracks']['items']:
                 
