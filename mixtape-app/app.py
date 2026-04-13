@@ -5,7 +5,54 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import random
 import streamlit.components.v1 as components
 import os
+import base64
 
+# --- Custom Styling Logic ---
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = f'''
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{bin_str}");
+        background-size: cover;
+        background-attachment: fixed;
+    }}
+    
+    /* Making the text more readable against the drawing */
+    h1, h2, h3, p, span, label {{
+        color: #3d2b1f !important; /* A dark sunflower-seed brown */
+        font-family: 'Courier New', Courier, monospace; /* Geeky typewriter font */
+        font-weight: bold;
+    }}
+    
+    /* Styling the buttons to look more "hand-drawn" */
+    .stButton>button {{
+        border: 2px solid #3d2b1f;
+        border-radius: 20px;
+        background-color: #ffda03; /* Sunflower yellow */
+        color: #3d2b1f;
+    }}
+    
+    /* Make the selectbox container slightly transparent white */
+    div[data-baseweb="select"] {{
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+    }}
+    </style>
+    '''
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+# Run the background function
+# Make sure "background.jpg" matches the name of your file on GitHub!
+try:
+    set_background('background.jpg')
+except Exception:
+    st.warning("Sunflower background not found. Upload 'background.jpg' to GitHub!")
 # --- App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🎧")
 
