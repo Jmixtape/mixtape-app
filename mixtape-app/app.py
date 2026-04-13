@@ -29,27 +29,24 @@ def set_background(img_file):
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
-        /* THE RED OUTER SCREEN BORDER - FORCED TO THE FRONT */
-        border: 30px solid #8b0000 !important;
-        box-sizing: border-box;
-        z-index: 1;
     }}
     
-    /* THE WHITE RIDGE BORDER - NOW POSITIONED INSIDE THE RED */
+    /* LAYER 1: THE THICK RED OUTER BORDER */
     .stApp::before {{
         content: "";
         position: fixed;
-        top: 0px; left: 0px; right: 0px; bottom: 0px;
-        border: 10px ridge #ffffff !important; 
+        top: 0; left: 0; right: 0; bottom: 0;
+        border: 30px solid #8b0000 !important; 
         pointer-events: none; 
-        z-index: 2;
+        z-index: 9998;
     }}
-    
-    /* ENSURE NO OVERLAP CLASH */
+
+    /* LAYER 2: THE WHITE RIDGE BORDER INSIDE THE RED */
     .stApp::after {{
         content: "";
         position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: 30px; left: 30px; right: 30px; bottom: 30px;
+        border: 10px ridge #ffffff !important; 
         pointer-events: none; 
         z-index: 9999;
     }}
