@@ -150,7 +150,8 @@ def get_spotify_token(cid, csec):
 
 def search_spotify_tracks(token, query):
     headers = {"Authorization": f"Bearer {token}"}
-    params = {"q": query, "type": "track", "limit": 50}
+    # THE FIX: Removed the "limit" entirely so Spotify uses its default safe cap
+    params = {"q": query, "type": "track"} 
     response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
     
     if response.status_code == 200:
