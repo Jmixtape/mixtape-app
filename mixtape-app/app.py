@@ -31,13 +31,13 @@ def set_background(img_file):
         background-attachment: fixed;
     }}
     
-    /* THE FIX: Thinner Floating Frame Border */
+    /* THE FIX: Floating Frame Border - Pure White Ridge */
     .stApp::after {{
         content: "";
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        border: 10px ridge #ffffff !important; 
-        pointer-events: none; 
+        border: 20px ridge #ffffff !important; 
+        pointer-events: none; /* Lets you click through the border */
         z-index: 9999;
     }}
     
@@ -50,12 +50,12 @@ def set_background(img_file):
         padding: 50px 60px;
         border-radius: 12px; 
         
-        /* THINNER INVERTED BORDERS */
-        border: 8px ridge #ffffff !important; 
-        outline: 3px solid #8b0000 !important; 
+        /* INVERTED BORDERS: White Ridge + Dark Red Outline */
+        border: 14px ridge #ffffff !important; 
+        outline: 6px solid #8b0000 !important; 
         
         box-shadow: 0px 25px 50px rgba(0,0,0,0.8);
-        margin-top: 60px; 
+        margin-top: 60px; /* Safely pushed down away from the top frame */
         margin-bottom: 60px;
     }}
 
@@ -72,31 +72,35 @@ def set_background(img_file):
         text-transform: uppercase;
         letter-spacing: -0.5px;
         line-height: 1.4;
+        /* 3D Red & Black Drop Shadow */
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
         color: #ffffff !important;
     }}
 
-    /* Black and White Title Styling */
+    /* THE FIX: Black and White Title Styling */
     .white-text-title h1 {{
         font-size: 46px !important;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         color: #ffffff !important;
+        /* Replaced Red with Black Shadow for the Title */
         text-shadow: 3px 3px 0px #000000, 6px 6px 15px rgba(0,0,0,0.8) !important;
     }}
     
-    /* Soft Glow Mixtape Emoji */
+    /* THE FIX: Reduced Glow on Mixtape Emoji */
     .mixtape-emoji {{
         display: inline-block;
         filter: brightness(0) invert(1);
+        /* Soft shadow instead of heavy glow so cassette is visible */
         filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
     }}
     
-    /* White Text Spacing */
+    /* Thick White Subtitle */
     .thick-white-text-sub p {{
         text-align: center;
-        font-size: 18px !important; 
+        font-size: 20px !important; 
         font-weight: 900 !important;
+        margin-bottom: 30px;
         color: #ffffff !important;
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.8) !important;
     }}
@@ -109,9 +113,9 @@ def set_background(img_file):
         text-shadow: 2px 2px 0px #8b0000, 4px 4px 8px rgba(0,0,0,0.7) !important;
     }}
 
-    /* PREMIUM SEARCH BAR (Selectbox) */
+    /* PREMIUM SEARCH BAR (Selectbox) - INVERTED TO WHITE RIDGE */
     div[data-baseweb="select"] {{
-        border: 4px ridge #ffffff !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important;
         cursor: text !important;
@@ -125,11 +129,11 @@ def set_background(img_file):
         text-shadow: none !important;
     }}
 
-    /* MASSIVE BUTTON */
+    /* MASSIVE BUTTON - INVERTED TO WHITE RIDGE - FIXED HIGHLIGHT COLOR */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 75px !important;
-        border: 4px ridge #ffffff !important;
+        border: 6px ridge #ffffff !important;
         border-radius: 4px !important;
         background-color: #ffffff !important; 
         color: #8b0000 !important; 
@@ -148,14 +152,21 @@ def set_background(img_file):
         text-shadow: none !important; 
     }}
     
-    div.stButton > button:hover {{
-        background-color: #8b0000 !important;
-        border: 4px ridge #ffffff !important;
+    /* FIX: Force text color to remain dark when highlighted/hovered */
+    div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {{
+        background-color: #ffffff !important;
+        border: 6px ridge #ffffff !important;
+        color: #8b0000 !important;
+    }}
+
+    div.stButton > button:hover p, div.stButton > button:focus p, div.stButton > button:active p {{
+        color: #8b0000 !important;
+        text-shadow: none !important;
     }}
 
     /* Expander */
     div[data-testid="stExpander"] {{
-        border: 3px solid #ffffff !important;
+        border: 4px solid #ffffff !important;
         border-radius: 4px !important;
         background-color: rgba(139, 0, 0, 0.4) !important; 
         margin-top: 15px;
@@ -167,6 +178,14 @@ def set_background(img_file):
         stroke: #ffffff !important;
     }}
 
+    div[data-testid="stExpander"] summary:hover *, 
+    div[data-testid="stExpander"] summary:focus * {{
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        outline: none !important;
+    }}
+    
     div[data-testid="stExpander"] summary svg, 
     div[data-testid="stExpander"] summary .stIcon,
     div[data-testid="stExpander"] summary span[data-testid="stExpanderIcon"] {{
