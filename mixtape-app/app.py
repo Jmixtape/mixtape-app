@@ -1,11 +1,10 @@
 import streamlit as st
 import pandas as pd
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 import random
 import streamlit.components.v1 as components
 import os
 import base64
+import requests
 
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
@@ -125,22 +124,40 @@ try:
 except Exception:
     st.info("🌻 Finalizing UI...")
 
-# --- 3. Setup Spotify API ---
+# --- 3. Setup Direct Spotify API (No Spotipy Cache Issues!) ---
 try:
     client_id = st.secrets["SPOTIPY_CLIENT_ID"]
     client_secret = st.secrets["SPOTIPY_CLIENT_SECRET"]
-    
-    # THE FIX: Changed port to 8080 so it doesn't crash into Streamlit's 8501
-    auth_manager = SpotifyOAuth(
-        client_id=client_id,
-        client_secret=client_secret,
-        redirect_uri="http://127.0.0.1:8080", 
-        scope="user-read-private"
-    )
-    sp = spotipy.Spotify(auth_manager=auth_manager)
-except Exception as e:
-    st.error(f"KEYS MISSING OR AUTH FAILED: {e}")
+except Exception:
+    st.error("KEYS MISSING. Please check your Streamlit secrets!")
     st.stop()
+
+# Cache the token for 50 minutes so it doesn't request a new one every single click
+@st.cache_data(ttl=3000)
+def get_spotify_token(cid, csec):
+    auth_str = f"{cid}:{csec}"
+    b64_auth_str = base64.b64encode(auth_str.encode()).decode()
+    headers = {
+        "Authorization": f"Basic {b64_auth_str}",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    data = {"grant_type": "client_credentials"}
+    response = requests.post("https://accounts.spotify.com/api/token", headers=headers, data=data)
+    
+    if response.status_code == 200:
+        return response.json().get("access_token")
+    return None
+
+def search_spotify_tracks(token, query):
+    headers = {"Authorization": f"Bearer {token}"}
+    params = {"q": query, "type": "track", "limit": 50}
+    response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error(f"API Error {response.status_code}: {response.text}")
+        return None
 
 # --- 4. Load Data ---
 @st.cache_data
@@ -164,27 +181,29 @@ if st.button("GENERATE MY PERFECT MATCH"):
     song_data = df[df['Display Name'] == selected_song].iloc[0]
     
     with st.spinner("CRUNCHING DATA..."):
-        try:
-            # Clean the string so the search is perfectly formatted
+        # 1. Fetch a clean token
+        token = get_spotify_token(client_id, client_secret)
+        
+        if not token:
+            st.error("FAILED TO AUTHENTICATE WITH SPOTIFY.")
+        else:
+            # 2. Run the search query safely via standard requests
             search_query = str(song_data['Artist']).strip()
+            search_results = search_spotify_tracks(token, search_query)
             
-            # Execute the search
-            search_results = sp.search(q=search_query, type='track', limit=50)
-            
-            if search_results['tracks']['items']:
+            if search_results and 'tracks' in search_results and search_results['tracks']['items']:
                 
-                # 1. Grab all IDs currently in the CSV so we can EXCLUDE them
+                # Exclude tracks already in the CSV
                 original_ids = set(df['Spotify Track Id'].dropna().astype(str).tolist())
                 clean_ids = {str(uid).split('/')[-1].split('?')[0].split(':')[-1] for uid in original_ids}
                 
-                # 2. Keep ONLY the tracks that are NOT already in the mixtape
                 new_picks = [t for t in search_results['tracks']['items'] if t['id'] not in clean_ids]
                 
                 if new_picks:
-                    # 3. Randomly pick ONE from the new discoveries
                     best_match = random.choice(new_picks)
                     st.markdown("### MATCH FOUND")
                     
+                    # Original Hand-coded iframe
                     embed_url = f"https://open.spotify.com/embed/track/{best_match['id']}?utm_source=generator"
                     components.iframe(embed_url, width=300, height=152)
                     
@@ -193,13 +212,8 @@ if st.button("GENERATE MY PERFECT MATCH"):
                         st.write(f"NEW DISCOVERY: {best_match['name']} by {best_match['artists'][0]['name']}")
                 else:
                     st.error("NO NEW TRACKS FOUND THAT AREN'T ALREADY IN THE MIXTAPE")
-            else:
+            elif search_results:
                 st.error("ARTIST NOT FOUND ON SPOTIFY")
-                
-        except spotipy.exceptions.SpotifyException as e:
-            st.error(f"SPOTIFY API ERROR: {e.http_status}. Message: {e.msg}")
-        except Exception as e:
-            st.error(f"ERROR: {e}")
 
 # --- Footer in White ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
