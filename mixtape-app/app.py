@@ -29,6 +29,9 @@ def set_background(img_file):
         background-image: url("data:image/jpeg;base64,{bin_str}");
         background-size: cover;
         background-attachment: fixed;
+        /* THE RED OUTER SCREEN BORDER */
+        border: 15px solid #8b0000 !important;
+        box-sizing: border-box;
     }}
     
     /* THE FIX: Thinner Floating Frame Border */
@@ -151,6 +154,11 @@ def set_background(img_file):
     div.stButton > button:hover {{
         background-color: #8b0000 !important;
         border: 4px ridge #ffffff !important;
+    }}
+
+    /* FORCE BUTTON TEXT WHITE ON HOVER */
+    div.stButton > button:hover p {{
+        color: #ffffff !important;
     }}
 
     /* Expander */
