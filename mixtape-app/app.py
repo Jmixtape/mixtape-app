@@ -10,7 +10,7 @@ import base64
 # --- 1. App Configuration ---
 st.set_page_config(page_title="The Counter-Mixtape", page_icon="🌻")
 
-# --- 2. Bulky High-Contrast Styling with Ultra-Glass Fix ---
+# --- 2. Bulky High-Contrast Styling with Ultra-Glass & White Footer ---
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -29,11 +29,9 @@ def set_background(img_file):
         box-sizing: border-box;
     }}
     
-    /* THE ULTRA-GLASS CARD: Fixed for Safari and Chrome */
+    /* THE ULTRA-GLASS CARD */
     .main .block-container {{
         background-color: rgba(255, 255, 255, 0.8) !important; 
-        
-        /* The Blur Magic - High Strength & Brightness for Readability */
         -webkit-backdrop-filter: blur(25px) brightness(1.1) !important;
         backdrop-filter: blur(25px) brightness(1.1) !important;
         
@@ -56,7 +54,7 @@ def set_background(img_file):
         line-height: 1.2;
     }}
 
-    /* MASSIVE RED BUTTON WITH GUARANTEED WHITE TEXT */
+    /* MASSIVE RED BUTTON WITH WHITE TEXT */
     div.stButton > button:first-child {{
         width: 100% !important;
         height: 85px !important;
@@ -69,7 +67,6 @@ def set_background(img_file):
         font-weight: 900 !important;
         text-transform: uppercase !important;
         box-shadow: 6px 6px 0px #000000;
-        transition: 0.2s ease;
     }}
     
     div.stButton > button:first-child p {{
@@ -82,7 +79,6 @@ def set_background(img_file):
         background-color: #ffffff !important;
         color: #8b0000 !important;
         border: 6px solid #8b0000 !important;
-        transform: translate(-2px, -2px);
     }}
 
     div.stButton > button:hover p {{
@@ -94,10 +90,17 @@ def set_background(img_file):
         border: 5px solid #8b0000 !important;
         background-color: white !important;
     }}
-    
-    div[data-baseweb="select"] div {{
-        color: #8b0000 !important;
+
+    /* CUSTOM WHITE FOOTER */
+    .white-footer {{
+        color: #ffffff !important;
+        text-align: center;
+        font-family: 'Arial Black', Gadget, sans-serif !important;
         font-weight: 900 !important;
+        text-transform: uppercase;
+        margin-top: 50px;
+        font-size: 45px;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
     }}
     </style>
     '''
@@ -109,7 +112,7 @@ try:
     bg_path = os.path.join(current_dir, "background.jpeg")
     set_background(bg_path)
 except Exception:
-    st.info("🌻 Loading lockdown mixtape vibes...")
+    st.info("🌻 Finalizing UI...")
 
 # --- 3. Setup Spotify API ---
 try:
@@ -118,10 +121,10 @@ try:
     auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(auth_manager=auth_manager)
 except Exception:
-    st.error("KEYS MISSING IN SECRETS")
+    st.error("KEYS MISSING")
     st.stop()
 
-# --- 4. Load & Prepare Data ---
+# --- 4. Load Data ---
 @st.cache_data
 def load_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -131,7 +134,7 @@ def load_data():
 df = load_data()
 df['Display Name'] = df['Song'] + " by " + df['Artist']
 
-# --- 5. The Interactive UI ---
+# --- 5. UI Layout ---
 st.title("THE COUNTER-MIXTAPE")
 st.markdown("choose your jam and find out what i would recommend Hope this helps you got this Cuitie HAPPY lockdown!!")
 
@@ -144,12 +147,11 @@ if st.button("GENERATE MY PERFECT MATCH"):
     
     with st.spinner("CRUNCHING DATA..."):
         try:
-            # Algorithm Logic
             artist_name = song_data['Artist']
-            search_results = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
+            search = sp.search(q=f"artist:{artist_name}", type='artist', limit=1)
             
-            if search_results['artists']['items']:
-                artist_id = search_results['artists']['items'][0]['id']
+            if search['artists']['items']:
+                artist_id = search['artists']['items'][0]['id']
                 related = sp.artist_related_artists(artist_id)
                 
                 if related['artists']:
@@ -177,10 +179,9 @@ if st.button("GENERATE MY PERFECT MATCH"):
                     st.error("NO RELATED VIBES")
             else:
                 st.error("ARTIST NOT FOUND")
-                
         except Exception as e:
-            st.error(f"SYSTEM ERROR: {e}")
+            st.error(f"ERROR: {e}")
 
-# --- Footer ---
+# --- Footer in White ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<h1 style='text-align: center;'>HAND-CODED BY OWEN</h1>", unsafe_allow_html=True)
+st.markdown("<p class='white-footer'>HAND-CODED BY OWEN</p>", unsafe_allow_html=True)
